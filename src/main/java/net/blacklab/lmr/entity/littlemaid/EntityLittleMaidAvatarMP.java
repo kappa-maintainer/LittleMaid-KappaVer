@@ -36,6 +36,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.stats.StatisticsManagerServer;
 import net.minecraft.util.CooldownTracker;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.EnumParticleTypes;
@@ -45,8 +46,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 
 
@@ -62,6 +66,7 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 	private double appendX;
 	private double appendY;
 	private double appendZ;
+	private ItemStackHandler maidInventoryHandler;
 
 	public EntityLittleMaidAvatarMP(World par1World)
 	{
@@ -85,6 +90,7 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 		inventory = avatar.maidInventory;
 		inventory.player = this;
 		inventoryContainer = new ContainerInventoryLittleMaid(inventory, avatar);
+		maidInventoryHandler = new ItemStackHandler(inventory.getSizeInventory());
 	}
 
 	// 実績参照
@@ -97,6 +103,38 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 		}
 		return super.getStatFile();
 	}
+	
+    @Override
+    public boolean hasCapability(Capability<?> cap, EnumFacing facing) {
+        return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(cap, facing);
+    }
+	
+    @Override
+    public <T> T getCapability(Capability<T> cap, EnumFacing facing) {
+        int i;
+    	if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        	for(i=0;i<maidInventoryHandler.getSlots();i++) {
+        		maidInventoryHandler.extractItem(i, 64, false);
+        	}
+        	if(facing==EnumFacing.NORTH) {
+        		for(i=0;i<=6;i++)
+        			if(maidInventoryHandler.getStackInSlot(i) != null)
+        				maidInventoryHandler.insertItem(i+18, inventory.getStackInSlot(i+18), false);
+        	}else if(facing==EnumFacing.UP) {
+        		for(i=0;i<18;i++)
+        			maidInventoryHandler.insertItem(i, inventory.getStackInSlot(i), false);
+        	}else {
+        		for(i=0;i<inventory.getSizeInventory();i++) {
+        			maidInventoryHandler.insertItem(i, inventory.getStackInSlot(i), false);
+        		}
+        	}
+        	
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(maidInventoryHandler);
+        } else {
+            return super.getCapability(cap, facing);
+        }
+    }
+
 
 	////////////////////////////////////////////////////////////////////////////////////
 	@Override
@@ -178,7 +216,7 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 			xpCooldown--;
 		}
 		avatar.setExperienceValue(experienceTotal);
-
+		
 		// TODO EntityPlayerをOverrideしていないばっかりにこの値が変わっていなかった？
 		ticksSinceLastSwing++;
 		

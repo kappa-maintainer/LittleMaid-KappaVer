@@ -138,6 +138,7 @@ import net.minecraft.potion.PotionUtils;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
@@ -156,9 +157,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 
@@ -361,6 +365,8 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 	
 	private ModeTrigger modeTrigger;
 	
+	private ItemStackHandler maidInventoryHandler;
+	
 	public EntityLittleMaid(World par1World) {
 		super(par1World);
 		// 初期設定
@@ -453,6 +459,8 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		
 		setExperienceHandler(new ExperienceHandler(this));
 
+		
+		maidInventoryHandler = new ItemStackHandler(maidInventory.getSizeInventory());
 		/*
 		if(par1World.isRemote){
 			NBTTagCompound t = new NBTTagCompound();
@@ -463,6 +471,37 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		*/
 	}
 
+    @Override
+    public boolean hasCapability(Capability<?> cap, EnumFacing facing) {
+        return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(cap, facing);
+    }
+	
+    @Override
+    public <T> T getCapability(Capability<T> cap, EnumFacing facing) {
+        int i;
+    	if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        	for(i=0;i<maidInventoryHandler.getSlots();i++) {
+        		if(maidInventoryHandler.getStackInSlot(i) != null)
+        			maidInventoryHandler.extractItem(i, 64, false);
+        	}
+        	if(facing==EnumFacing.NORTH) {
+        		for(i=0;i<=6;i++)
+        			maidInventoryHandler.insertItem(i+18, maidInventory.getStackInSlot(i+18), false);
+        	}else if(facing==EnumFacing.UP) {
+        		for(i=0;i<18;i++)
+        			maidInventoryHandler.insertItem(i, maidInventory.getStackInSlot(i), false);
+        	}else {
+        		for(i=0;i<maidInventory.getSizeInventory();i++) {
+        			maidInventoryHandler.insertItem(i, maidInventory.getStackInSlot(i), false);
+        		}
+        	}
+        	
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(maidInventoryHandler);
+        } else {
+            return super.getCapability(cap, facing);
+        }
+    }
+	
 	public IEntityLittleMaidAvatar getAvatarIF()
 	{
 		return (IEntityLittleMaidAvatar)maidAvatar;
