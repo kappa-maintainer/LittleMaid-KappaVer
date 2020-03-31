@@ -96,6 +96,8 @@ public class LMRConfig {
 	/** 試験中の追加機能 メイドアバター */
 	public static boolean cfg_prottype_maid_avatar = false;
 	
+	public static boolean cfg_is_arrows_pickable = false;
+	
 	/**
 	 * Config初期化
 	 */
@@ -262,6 +264,9 @@ public class LMRConfig {
 		cfg_ac_arrow_item_ids = Arrays.asList(
 				cfg.getStringList("Arrow", "Archer", arrowItemIds, "Set the item ID to be processed in the same way as the arrow or bullet.")
 		);
+		
+		cfg_is_arrows_pickable = cfg.getBoolean("ShotArrowsCanBePickUp", "Archer", false, 
+				"Arrows shot by maids can be picked up by players.");
 		
 	}
 	

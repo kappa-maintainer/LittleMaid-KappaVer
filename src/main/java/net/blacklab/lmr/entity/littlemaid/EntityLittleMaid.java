@@ -2149,18 +2149,20 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		if(lhealth > 0) {
 			// 近接監視の追加はここ
 			// アイテムの回収
-			if (!getEntityWorld().isRemote) {
-				List<Entity> list = getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(1.0D, 0.0D, 1.0D));
-				if (list != null) {
-					for (int i = 0; i < list.size(); i++) {
-						Entity entity = (Entity)list.get(i);
-						if (!entity.isDead) {
-							if (entity instanceof EntityArrow &&
-									(getEntityWorld().getDifficulty() == EnumDifficulty.HARD ? ((EntityArrow) entity).shootingEntity == this : true)) {
-								// 特殊回収
-								((EntityArrow)entity).pickupStatus = PickupStatus.ALLOWED;
+			if(LMRConfig.cfg_is_arrows_pickable) {
+				if (!getEntityWorld().isRemote) {
+					List<Entity> list = getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(1.0D, 0.0D, 1.0D));
+					if (list != null) {
+						for (int i = 0; i < list.size(); i++) {
+							Entity entity = (Entity)list.get(i);
+							if (!entity.isDead) {
+								if (entity instanceof EntityArrow &&
+										((EntityArrow) entity).shootingEntity == this) {
+									// 特殊回収
+									((EntityArrow)entity).pickupStatus = PickupStatus.ALLOWED;
+								}
+								entity.onCollideWithPlayer(maidAvatar);
 							}
-							entity.onCollideWithPlayer(maidAvatar);
 						}
 					}
 				}
