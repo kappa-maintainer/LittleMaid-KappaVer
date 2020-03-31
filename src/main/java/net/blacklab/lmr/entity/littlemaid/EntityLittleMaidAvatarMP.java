@@ -89,7 +89,7 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 		 */
 		inventory = avatar.maidInventory;
 		inventory.player = this;
-		inventoryContainer = new ContainerInventoryLittleMaid(inventory, avatar);
+		inventoryContainer = new ContainerInventoryLittleMaid(inventory, avatar.maidInventory, avatar);
 		maidInventoryHandler = new ItemStackHandler(inventory.getSizeInventory());
 	}
 
