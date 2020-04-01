@@ -3389,6 +3389,17 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 	public UUID getMaidMasterUUID() {
 		return OwnableEntityHelper.getOwner(this);
 	}
+	
+	public List<EntityLittleMaid> getNearbyMaids() {
+		List<Entity> list = getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(15.0, 15.0, 15.0, 15.0, 15.0, 15.0));
+		List<EntityLittleMaid> maidlist = new ArrayList<EntityLittleMaid>();
+		for(int i=0;i<list.size();i++) {
+			Entity entity = list.get(i);
+			if(entity instanceof EntityLittleMaid)
+				maidlist.add((EntityLittleMaid) entity);
+		}
+		return maidlist;
+	}
 
 	@Nullable
 	public EntityPlayer getMaidMasterEntity() {
