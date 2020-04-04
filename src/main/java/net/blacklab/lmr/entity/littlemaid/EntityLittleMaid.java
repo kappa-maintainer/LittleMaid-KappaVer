@@ -3550,6 +3550,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		
 		//インベントリの同期
 		LMRNetwork.syncLittleMaidInventory(this);
+		this.getNextEquipItem();
 	}
 
 	// 腕振り
