@@ -13,6 +13,7 @@ import net.blacklab.lmr.entity.ai.EntityAILMNearestAttackableTarget;
 import net.blacklab.lmr.entity.littlemaid.EntityLittleMaid;
 import net.blacklab.lmr.entity.littlemaid.trigger.ModeTrigger;
 import net.blacklab.lmr.entity.littlemaid.trigger.ModeTriggerRegisterHelper;
+import net.blacklab.lmr.inventory.InventoryLittleMaid;
 import net.blacklab.lmr.util.helper.MaidHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -140,6 +141,9 @@ public class EntityMode_Archer extends EntityModeBase {
 
 	@Override
 	public int getNextEquipItem(String pMode) {
+		if (owner.isModeLocked && !owner.getHandSlotForModeChange().isEmpty()) {
+			return InventoryLittleMaid.handInventoryOffset;
+		}
 		int li;
 		if ((li = super.getNextEquipItem(pMode)) >= 0) {
 			return li;
@@ -156,6 +160,8 @@ public class EntityMode_Archer extends EntityModeBase {
 				litemstack = owner.maidInventory.getStackInSlot(li);
 				if (litemstack.isEmpty()) continue;
 
+				if(owner.isModeLocked)
+					return li;
 				// 射手
 				if (isTriggerItem(pMode, litemstack)) {
 					return li;
@@ -294,6 +300,9 @@ public class EntityMode_Archer extends EntityModeBase {
 	 * 対象アイテムが矢判定か確認する
 	 */
 	private boolean isInventoryArrowItem() {
+		
+		if(owner.isModeLocked)
+			return true;
 		
 		//矢(弾丸)ｸﾗｽ判定
 		for (Class<? extends Item> classItem : arrowClassList) {

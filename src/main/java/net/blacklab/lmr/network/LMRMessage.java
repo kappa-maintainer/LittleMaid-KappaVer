@@ -119,6 +119,8 @@ public class LMRMessage implements IMessage
 		/** Change Freedom Mode from GUI **/
 		SERVER_CHAMGE_FREEDOM	(0x30,  true),
 		
+		SERVER_CHANGE_MODE_LOCK (0x31,  true),
+		
 		/** メイドさんのインベントリ同期 */
 		SERVER_LITTLE_MAID_INVENTORY(0x41,  true);
 

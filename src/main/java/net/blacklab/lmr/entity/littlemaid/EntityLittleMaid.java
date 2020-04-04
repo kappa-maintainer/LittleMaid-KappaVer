@@ -12,6 +12,7 @@ import static net.blacklab.lmr.util.Statics.dataWatch_Flags_Working;
 import static net.blacklab.lmr.util.Statics.dataWatch_Flags_looksWithInterest;
 import static net.blacklab.lmr.util.Statics.dataWatch_Flags_looksWithInterestAXIS;
 import static net.blacklab.lmr.util.Statics.dataWatch_Flags_remainsContract;
+import static net.blacklab.lmr.util.Statics.dataWatch_Flags_LockMode;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -77,6 +78,7 @@ import net.blacklab.lmr.item.ItemTriggerRegisterKey;
 import net.blacklab.lmr.network.GuiHandler;
 import net.blacklab.lmr.network.LMRMessage;
 import net.blacklab.lmr.network.LMRNetwork;
+import net.blacklab.lmr.network.ProxyClient;
 import net.blacklab.lmr.util.Counter;
 import net.blacklab.lmr.util.EntityCaps;
 import net.blacklab.lmr.util.EnumSound;
@@ -136,6 +138,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.profiler.Profiler;
+import net.minecraft.server.management.PlayerList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
@@ -148,7 +151,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.EnumDifficulty;
@@ -353,6 +358,8 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 	public int playingTick = 0;
 
 	public boolean isWildSaved = false;
+	
+	public boolean isModeLocked;
 
 	// サーバ用テクスチャ処理移行フラグ
 	private boolean isMadeTextureNameFlag = false;
@@ -407,7 +414,6 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		mstatOpenInventory = false;
 //		isMaidChaseWait = false;
 		mstatTime = 6000;
-
 		maidOverDriveTime = new Counter(5, 300, -32);
 		workingCount = new Counter(11, 10, -10);
 		registerTick = new Counter(200, 200, -20);
@@ -545,6 +551,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 			}
 		}
 		setColor(avaliableColor[rand.nextInt(nsize)]);
+		isModeLocked = false;
 	}
 
 	protected void applyEntityAttributes() {
@@ -792,6 +799,12 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		tagCompound.setString("Armor", getModelNameArmor());
 
 		syncNet(LMRMessage.EnumPacketMode.SYNC_MODEL, tagCompound);
+	}
+	
+	public void syncModeLocked() {
+		NBTTagCompound tagCompound = new NBTTagCompound();
+		tagCompound.setBoolean("LockMode", isModeLocked);
+		syncNet(LMRMessage.EnumPacketMode.SERVER_CHANGE_MODE_LOCK, tagCompound);
 	}
 
 	public void syncNet(LMRMessage.EnumPacketMode pMode, NBTTagCompound tagCompound) {
@@ -1340,6 +1353,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		par1nbtTagCompound.setString("Mode", getMaidModeString());
 		par1nbtTagCompound.setBoolean("Wait", isMaidWait());
 		par1nbtTagCompound.setBoolean("Freedom", isFreedom());
+		par1nbtTagCompound.setBoolean("LockMode", isModeLocked);
 		par1nbtTagCompound.setBoolean("Tracer", isTracer());
 		par1nbtTagCompound.setBoolean("isWildSaved", isWildSaved);
 		par1nbtTagCompound.setInteger("LimitCount", maidContractLimit);
@@ -1411,6 +1425,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		setTracer(par1nbtTagCompound.getBoolean("Tracer"));
 		
 		setMaidMode(par1nbtTagCompound.getString("Mode"));
+		setLockMode(par1nbtTagCompound.getBoolean("LockMode"));
 		
 		if (par1nbtTagCompound.hasKey("LimitCount")) {
 			maidContractLimit = par1nbtTagCompound.getInteger("LimitCount");
@@ -2636,11 +2651,11 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		checkClockMaid();
 		checkHeadMount();
 		if (getActiveModeClass() != null && !getHandSlotForModeChange().isEmpty())
-			if (maidInventory.isChanged(InventoryLittleMaid.handInventoryOffset) ||
-					maidInventory.isChanged(InventoryLittleMaid.handInventoryOffset + 1)) {
+			if ((maidInventory.isChanged(InventoryLittleMaid.handInventoryOffset) ||
+					maidInventory.isChanged(InventoryLittleMaid.handInventoryOffset + 1)) &&
+						!isModeLocked) {
 				setMaidModeAuto(getMaidMasterEntity());
 			}
-
 		getNextEquipItem();
 
 //		setArmorTextureValue();
@@ -2884,6 +2899,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 	 * @param pEntityPlayer
 	 */
 	public void displayGUIMaidInventory(EntityPlayer pEntityPlayer) {
+		syncModeLocked();
 		if (!getEntityWorld().isRemote) {
 			GuiHandler.maidServer = this;
 			pEntityPlayer.openGui(LittleMaidReengaged.instance, GuiHandler.GUI_ID_INVVENTORY, getEntityWorld(),
@@ -3269,6 +3285,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 	 * @return whether the mode was changed
 	 */
 	private boolean setMaidModeAuto(EntityPlayer par1EntityPlayer) {
+		
 		boolean lflag = false;
 		String orgnMode = getMaidModeString();
 
@@ -3766,6 +3783,12 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		return !mstatPlayingRole.equals(PlayRole.NOTPLAYING);
 	}
 
+	public void setLockMode(boolean pFlag) {
+		setMaidFlags(pFlag, dataWatch_Flags_LockMode);
+		isModeLocked = pFlag;
+		
+	}
+	
 
 	// 自由行動
 	public void setFreedom(boolean pFlag) {
@@ -4025,6 +4048,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		mstatBloodsuck = (li & dataWatch_Flags_Bloodsuck) > 0;
 		looksWithInterest = (li & dataWatch_Flags_looksWithInterest) > 0;
 		looksWithInterestAXIS = (li & dataWatch_Flags_looksWithInterestAXIS) > 0;
+		isModeLocked = (li & dataWatch_Flags_LockMode) > 0;
 		maidOverDriveTime.updateClient((li & dataWatch_Flags_OverDrive) > 0);
 		workingCount.updateClient((li & dataWatch_Flags_Working) > 0);
 		registerTick.updateClient((li & dataWatch_Flags_Register) > 0);

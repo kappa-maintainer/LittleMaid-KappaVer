@@ -18,6 +18,7 @@ public class Statics
 	public static final int dataWatch_Flags_OverDrive				= 0x00001000;
 	public static final int dataWatch_Flags_Register				= 0x00002000;
 	public static final int dataWatch_Flags_Swimming				= 0x00004000;
+	public static final int dataWatch_Flags_LockMode                = 0x00008000;
 
 	public static final int dataFlags_ForceUpdateInventory	= 0x80000000;
 

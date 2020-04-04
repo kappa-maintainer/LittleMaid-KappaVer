@@ -82,7 +82,8 @@ public class EntityMode_Healer extends EntityModeBase {
 
 	@Override
 	public int getNextEquipItem(String pMode) {
-		if (isTriggerItem(pMode, owner.getHandSlotForModeChange())) {
+		if (isTriggerItem(pMode, owner.getHandSlotForModeChange()) || 
+				(owner.isModeLocked && !owner.getHandSlotForModeChange().isEmpty())) {
 			return InventoryLittleMaid.handInventoryOffset;
 		}
 
@@ -92,6 +93,9 @@ public class EntityMode_Healer extends EntityModeBase {
 			for (int i = 0; i < owner.maidInventory.getSizeInventory(); i++) {
 				ItemStack is = owner.maidInventory.getStackInSlot(i);
 				if (is.isEmpty()) continue;
+				
+				if(owner.isModeLocked)
+					return i;
 				// 対象は食料かポーション
 				if (isTriggerItem(pMode, is)) {
 					return i;

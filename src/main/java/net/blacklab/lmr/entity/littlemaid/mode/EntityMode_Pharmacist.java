@@ -86,7 +86,8 @@ public class EntityMode_Pharmacist extends EntityModeBlockBase {
 	@Override
 	public int getNextEquipItem(String pMode) {
 		int li;
-		if ((li = super.getNextEquipItem(pMode)) >= 0) {
+		if ((li = super.getNextEquipItem(pMode)) >= 0 || 
+				(owner.isModeLocked && !owner.getHandSlotForModeChange().isEmpty())) {
 			return li;
 		}
 
@@ -100,6 +101,9 @@ public class EntityMode_Pharmacist extends EntityModeBlockBase {
 				for (li = 0; li < owner.maidInventory.getSizeInventory(); li++) {
 					litemstack = owner.maidInventory.getStackInSlot(li);
 					if (!litemstack.isEmpty()) {
+
+						if(owner.isModeLocked)
+							return li;
 						// 対象は水ポーション
 						if (isTriggerItem(pMode, litemstack)) {
 							return li;

@@ -148,6 +148,10 @@ public class LMRNetwork
 		case SERVER_REQUEST_BOOST :
 			lemaid.requestExpBoost();
 			break;
+			
+		case SERVER_CHANGE_MODE_LOCK :
+			lemaid.setLockMode(tagCompound.getBoolean("LockMode"));
+			break;
 
 		case SERVER_CHAMGE_FREEDOM :
 			lemaid.setFreedom(tagCompound.getBoolean("Freedom"));

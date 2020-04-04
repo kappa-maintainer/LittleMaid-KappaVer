@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.datafix.fixes.OptionsLowerCaseLanguage;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
@@ -105,7 +106,8 @@ public class EntityMode_Cooking extends EntityModeBlockBase {
 		case mmode_Cooking :
 			for (li = 0; li < owner.maidInventory.getSizeInventory(); li++) {
 				// 調理
-				if (owner.maidInventory.isItemBurned(li)) {
+				if (owner.maidInventory.isItemBurned(li) ||
+						(owner.isModeLocked && !owner.maidInventory.getStackInSlot(li).isEmpty())) {
 					swapItemIntoMainHandSlot(li);
 					return InventoryLittleMaid.handInventoryOffset;
 				}

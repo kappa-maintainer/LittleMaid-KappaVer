@@ -98,7 +98,8 @@ public class EntityMode_TorchLayer extends EntityModeBase {
 	@Override
 	public int getNextEquipItem(String pMode) {
 		int li;
-		if ((li = super.getNextEquipItem(pMode)) >= 0) {
+		if ((li = super.getNextEquipItem(pMode)) >= 0 || 
+				(owner.isModeLocked && !owner.getHandSlotForModeChange().isEmpty())) {
 			return li;
 		}
 
@@ -111,6 +112,8 @@ public class EntityMode_TorchLayer extends EntityModeBase {
 				litemstack = owner.maidInventory.getStackInSlot(li);
 				if (litemstack.isEmpty()) continue;
 
+				if(owner.isModeLocked)
+					return li;
 				// 松明
 				if (isTriggerItem(pMode, litemstack)) {
 					return li;

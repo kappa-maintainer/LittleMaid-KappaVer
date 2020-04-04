@@ -129,7 +129,8 @@ public class EntityMode_Fencer extends EntityModeBase {
 
 	@Override
 	public int getNextEquipItem(String pMode) {
-		if (isTriggerItem(pMode, owner.getHandSlotForModeChange())) {
+		if (isTriggerItem(pMode, owner.getHandSlotForModeChange()) || 
+				(owner.isModeLocked && !owner.getHandSlotForModeChange().isEmpty())) {
 			return InventoryLittleMaid.handInventoryOffset;
 		}
 
@@ -146,6 +147,8 @@ public class EntityMode_Fencer extends EntityModeBase {
 				litemstack = owner.maidInventory.getStackInSlot(li);
 				if (litemstack.isEmpty()) continue;
 
+				if(owner.isModeLocked)
+					return li;
 				// 剣
 				if (isTriggerItem(pMode, litemstack)) {
 					return li;
@@ -168,7 +171,9 @@ public class EntityMode_Fencer extends EntityModeBase {
 			for (li = 0; li < owner.maidInventory.getSizeInventory(); li++) {
 				litemstack = owner.maidInventory.getStackInSlot(li);
 				if (litemstack.isEmpty()) continue;
-
+				
+				if(owner.isModeLocked)
+					return li;
 				// 斧
 				if (isTriggerItem(pMode, litemstack)) {
 					return li;

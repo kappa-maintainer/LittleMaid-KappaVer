@@ -213,7 +213,8 @@ public class EntityMode_Shearer extends EntityModeBase {
 	@Override
 	public int getNextEquipItem(String pMode) {
 		int li;
-		if ((li = super.getNextEquipItem(pMode)) >= 0) {
+		if ((li = super.getNextEquipItem(pMode)) >= 0 || 
+				(owner.isModeLocked && !owner.getHandSlotForModeChange().isEmpty())) {
 			return li;
 		}
 
@@ -226,7 +227,8 @@ public class EntityMode_Shearer extends EntityModeBase {
 			for (li = 0; li < owner.maidInventory.getSizeInventory() - 1; li++) {
 				litemstack = owner.maidInventory.getStackInSlot(li);
 				if (litemstack.isEmpty()) continue;
-
+				if(owner.isModeLocked)
+					return li;
 				// はさみ
 				if (isTriggerItem(pMode, litemstack)) {
 					return li;
@@ -235,6 +237,8 @@ public class EntityMode_Shearer extends EntityModeBase {
 			break;
 		case mmode_Detonator :
 			for (li = 0; li < owner.maidInventory.getSizeInventory(); li++) {
+				if(owner.isModeLocked)
+					return li;
 				// 爆発物
 				if (isTriggerItem(pMode, owner.maidInventory.getStackInSlot(li))) {
 					return li;

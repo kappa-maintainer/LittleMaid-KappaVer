@@ -122,7 +122,8 @@ public class EntityMode_Farmer extends EntityModeBase {
 	@Override
 	public int getNextEquipItem(String pMode) {
 		int li;
-		if ((li = super.getNextEquipItem(pMode)) >= 0) {
+		if ((li = super.getNextEquipItem(pMode)) >= 0 || 
+				(owner.isModeLocked && !owner.getHandSlotForModeChange().isEmpty())) {
 			return InventoryLittleMaid.handInventoryOffset;
 		}
 
@@ -135,6 +136,8 @@ public class EntityMode_Farmer extends EntityModeBase {
 				litemstack = owner.maidInventory.getStackInSlot(li);
 				if (litemstack.isEmpty()) continue;
 
+				if(owner.isModeLocked)
+					return li;
 				// クワ
 				if (isTriggerItem(mmode_Farmer, litemstack)) {
 					return li;
