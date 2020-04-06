@@ -101,6 +101,7 @@ public class LMRConfig {
 	
 	public static boolean cfg_is_arrows_pickable = false;
 	
+	public static boolean cfg_can_lock_modes = true;
 	/**
 	 * Config初期化
 	 */
@@ -143,6 +144,9 @@ public class LMRConfig {
 		//メイドの土産設定
 		cfg_isResurrection = cfg.getBoolean("isResurrection", "General", true,
 				"If 'true', Drops a resurrection item when a maid dies.");
+		
+		cfg_can_lock_modes = cfg.getBoolean("canLockMaidMode", "General", true, 
+				"If 'true', maid's inventory GUI will have a button to lock maid's mode.");
 		
 		//指定IDを砂糖として認識する
 		String[] sugarItemIds = new String[] {"minecraft:sugar"};

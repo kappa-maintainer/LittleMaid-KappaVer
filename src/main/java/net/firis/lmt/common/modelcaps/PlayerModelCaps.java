@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import ibxm.Player;
 import net.blacklab.lmr.entity.maidmodel.IModelCaps;
+import net.blacklab.lmr.entity.maidmodel.ModelLittleMaidBase;
 import net.blacklab.lmr.entity.maidmodel.ModelMultiBase;
 import net.blacklab.lmr.util.helper.ItemHelper;
 import net.firis.lmt.client.event.LittleMaidAvatarClientTickEventHandler;
+import net.firis.lmt.config.FirisConfig;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +18,7 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
@@ -130,8 +134,11 @@ public class PlayerModelCaps implements IModelCaps {
 		case caps_isSwingInProgress:
 			return owner.isSwingInProgress;
 		case caps_isSneak:
-			if (this.isFirstPerson) return false;
-			return owner.isSneaking();
+			if (this.isFirstPerson && !FirisConfig.cfg_immersive_avatar) {
+				return false;
+			} else {
+				return owner.isSneaking();
+			}
 		case caps_isBurning:
 			return owner.isBurning();
 		case caps_isInWater:
@@ -170,9 +177,8 @@ public class PlayerModelCaps implements IModelCaps {
 					MathHelper.floor(owner.posY + (Double)pArg[1]),
 					MathHelper.floor(owner.posZ + (Double)pArg[2])));
 		case caps_boundingBox:
-			if (pArg == null) {
+			if (pArg == null)
 				return owner.getEntityBoundingBox();
-			}
 			switch ((Integer)pArg[0]) {
 			case 0:
 				return owner.getEntityBoundingBox().maxX;
@@ -227,7 +233,7 @@ public class PlayerModelCaps implements IModelCaps {
 			
 		//メイドさん待機モーション
 		case caps_isWait:
-			if (this.isFirstPerson) return false;
+			if (this.isFirstPerson && !FirisConfig.cfg_immersive_avatar) return false;
 			return LittleMaidAvatarClientTickEventHandler.lmAvatarWaitAction.getStat(owner);
 			
 		//砂糖を持った時の首傾げ

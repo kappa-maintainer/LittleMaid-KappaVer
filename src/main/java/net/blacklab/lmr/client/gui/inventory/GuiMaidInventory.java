@@ -14,6 +14,7 @@ import net.blacklab.lmr.client.gui.GuiButtonFreedomToggle;
 import net.blacklab.lmr.client.gui.GuiButtonModeLock;
 import net.blacklab.lmr.client.gui.GuiButtonNextPage;
 import net.blacklab.lmr.client.gui.GuiTextureSelect;
+import net.blacklab.lmr.config.LMRConfig;
 import net.blacklab.lmr.entity.experience.ExperienceUtil;
 import net.blacklab.lmr.entity.littlemaid.EntityLittleMaid;
 import net.blacklab.lmr.inventory.ClientInventoryLittleMaid;
@@ -156,7 +157,7 @@ public class GuiMaidInventory extends GuiContainer {
 		buttonList.add(visarmorbutton[2] = new GuiButtonArmorToggle  (302, guiLeft + 32, guiTop - 14, "littleMaidMob.gui.toggle.outer"     , true).setNode(1).setLight(0));
 		buttonList.add(visarmorbutton[3] = new GuiButtonArmorToggle  (303, guiLeft + 48, guiTop - 14, "littleMaidMob.gui.toggle.outerlight", true).setNode(1).setLight(1));
 		buttonList.add(frdmbutton        = new GuiButtonFreedomToggle(311, guiLeft + 64, guiTop - 16, "littleMaidMob.gui.toggle.freedom"   , entitylittlemaid.isFreedom(), entitylittlemaid));
-		buttonList.add(lockbutton        = new GuiButtonModeLock(322, guiLeft + 133, guiTop + 43, "littleMaidMob.gui.button.lock", entitylittlemaid.isModeLocked, true));
+		buttonList.add(lockbutton        = new GuiButtonModeLock(304, guiLeft + 133, guiTop + 43, "littleMaidMob.gui.button.lock", entitylittlemaid.isModeLocked, LMRConfig.cfg_can_lock_modes));
 //		buttonList.add(swimbutton        = new GuiButtonSwimToggle   (310, guiLeft + 80, guiTop - 16, "littleMaidMob.gui.toggle.swim"      , entitylittlemaid.isSwimmingEnabled()));
 		buttonList.add(boostMinus        = new GuiButtonBoostChange  (320, guiLeft + 96, guiTop - 16, "littleMaidMob.gui.button.minusboost").setInverse(true).setEnabled(false));
 		buttonList.add(boostPlus         = new GuiButtonBoostChange  (321, guiLeft+xSize-16, guiTop - 16, "littleMaidMob.gui.button.plusboost"));
@@ -256,6 +257,8 @@ public class GuiMaidInventory extends GuiContainer {
     		int yAxis = (mouseY - (height - this.ySize) / 2);
 			if (guibutton instanceof GuiButtonArmorToggle) {
 				((GuiButtonArmorToggle) guibutton).drawButtonForegroundLayer(xAxis, yAxis);
+			}else if(guibutton instanceof GuiButtonModeLock) {
+				((GuiButtonModeLock) guibutton).drawButtonForegroundLayer(xAxis, yAxis);
 			}
         }
 	}
@@ -683,7 +686,7 @@ public class GuiMaidInventory extends GuiContainer {
 			visarmorbutton[3].toggle=!visarmorbutton[3].toggle;
 			setArmorVisible();
 			break;
-		case 322 :
+		case 304 :
 			entitylittlemaid.isModeLocked = !(entitylittlemaid.isModeLocked);
 			lockbutton.locked = entitylittlemaid.isModeLocked;
 			

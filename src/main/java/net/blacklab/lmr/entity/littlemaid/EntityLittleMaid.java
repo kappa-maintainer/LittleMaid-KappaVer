@@ -2652,8 +2652,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		checkHeadMount();
 		if (getActiveModeClass() != null && !getHandSlotForModeChange().isEmpty())
 			if ((maidInventory.isChanged(InventoryLittleMaid.handInventoryOffset) ||
-					maidInventory.isChanged(InventoryLittleMaid.handInventoryOffset + 1)) &&
-						!isModeLocked) {
+					maidInventory.isChanged(InventoryLittleMaid.handInventoryOffset + 1))) {
 				setMaidModeAuto(getMaidMasterEntity());
 			}
 		getNextEquipItem();
@@ -3292,22 +3291,24 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 //		setActiveModeClass(null);
 		for (int li = 0; li < maidEntityModeList.size() && !lflag; li++) {
 			lflag = maidEntityModeList.get(li).changeMode(par1EntityPlayer);
-			if (lflag) {
+			if (lflag && !isModeLocked) {
 				setActiveModeClass(maidEntityModeList.get(li));
 			}
 		}
-		if (!lflag) {
+		if (!lflag && !isModeLocked) {
 			setMaidMode(EntityMode_Basic.mmode_Escort);
 			setEquipItem(-1);
 //			maidInventory.currentItem = -1;
 		}
-		getNextEquipItem();
-
-		if (!orgnMode.equals(getMaidModeString())) {
-			clearTilePosAll();
-			getNavigator().clearPath();
-			setAttackTarget(null);
-			return true;
+		if(!isModeLocked) {
+			getNextEquipItem();
+		
+			if (!orgnMode.equals(getMaidModeString())) {
+				clearTilePosAll();
+				getNavigator().clearPath();
+				setAttackTarget(null);
+				return true;
+			}
 		}
 		return false;
 	}

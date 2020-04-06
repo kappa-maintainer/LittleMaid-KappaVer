@@ -2,11 +2,15 @@ package net.firis.lmt.client.model;
 
 import org.lwjgl.opengl.GL11;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import net.blacklab.lmr.entity.maidmodel.ModelLittleMaidBase;
 import net.blacklab.lmr.entity.maidmodel.ModelMultiBase;
 import net.blacklab.lmr.util.helper.RendererHelper;
+import net.firis.lmt.common.LMTCore;
 import net.firis.lmt.common.manager.PlayerModelManager;
 import net.firis.lmt.common.modelcaps.PlayerModelCaps;
+import net.firis.lmt.config.FirisConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -15,6 +19,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -29,6 +35,7 @@ public class ModelLittleMaidMultiModel extends ModelBase {
 	private PlayerModelCaps playerCaps = null;
 	private ModelMultiBase playerModel = null;
 	
+	private static Method setSize = ObfuscationReflectionHelper.findMethod(Entity.class, "func_70105_a", void.class, float.class, float.class);
 	/**
 	 * コンストラクタ
 	 */
@@ -55,8 +62,9 @@ public class ModelLittleMaidMultiModel extends ModelBase {
 		
 		//プレイヤーモデルの準備
 		playerModel = PlayerModelManager.getPlayerModel(player);
+
 		playerCaps = getModelCaps(playerModel, player, isFirstPerson);
-		
+
 		playerModel.showAllParts();
 		
 	}
@@ -171,7 +179,7 @@ public class ModelLittleMaidMultiModel extends ModelBase {
 		
 		//テクスチャバインド
 		Minecraft.getMinecraft().getTextureManager().bindTexture(PlayerModelManager.getPlayerTexture(player));
-		
+
 		//お手ての位置調整
 		GlStateManager.translate(0.0F, 0.25F, 0.0F);
 

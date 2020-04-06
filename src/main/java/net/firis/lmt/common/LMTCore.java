@@ -11,6 +11,7 @@ import net.firis.lmt.client.renderer.RendererMaidPlayerMultiModel;
 import net.firis.lmt.common.item.LMItemPlayerMaidBook;
 import net.firis.lmt.config.ConfigChangedEventHandler;
 import net.firis.lmt.config.FirisConfig;
+import net.firis.lmt.proxy.CommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -21,6 +22,8 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -33,6 +36,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class LMTCore {
 	
+	@SidedProxy(clientSide = "net.firis.lmt.proxy.ClientProxy", serverSide = "net.firis.lmt.proxy.ServerProxy")
+	public static CommonProxy proxy;
 	/**
 	 * テスト用リトルメイドモジュールを使用するかどうか
 	 * @return
@@ -154,6 +159,10 @@ public class LMTCore {
 		// メイドさんになる本
 		ModelLoader.setCustomModelResourceLocation(LMItems.PLAYER_MAID_BOOK, 0,
 				new ModelResourceLocation(LMItems.PLAYER_MAID_BOOK.getRegistryName(), "inventory"));
+	}
+	
+	public static void init(FMLInitializationEvent event) {
+		proxy.init();
 	}
 	
 	/**

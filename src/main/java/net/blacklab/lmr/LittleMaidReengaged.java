@@ -338,6 +338,8 @@ public class LittleMaidReengaged {
 
 		//Plugin初期化処理
 		PluginManager.initRegisterPlugin(event);
+		
+		LMTCore.init(event);
 	}
 
 	// public static ProxyClient.CountThread countThread;

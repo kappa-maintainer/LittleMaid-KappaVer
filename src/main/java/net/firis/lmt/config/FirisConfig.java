@@ -32,6 +32,8 @@ public class FirisConfig {
 	public static String cfg_armor_model_leg = "";
 	public static String cfg_armor_model_boots = "";
 	
+	public static Boolean cfg_immersive_avatar = true;
+	
 	public static void init(File configDir) {
 		
 		File configFile = new File(configDir, "lmrfp_maidavatar.cfg");
@@ -93,6 +95,8 @@ public class FirisConfig {
 				DEFAULT_MAID_MODEL, 
 				"靴防具モデル名");
 		
+		cfg_immersive_avatar = config.getBoolean("07.ImmersiveAvatar", CATEGORY_AVATAR, 
+				true, "Change avatar's bounding box and view height to maid's");
 		config.save();
 		
 	}

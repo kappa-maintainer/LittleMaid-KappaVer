@@ -124,7 +124,7 @@ littleMaidMob.gui.toggle.swim.disable=Disable Swimming Mode
 littleMaidMob.gui.toggle.freedom.enable=Switch to Freedom Mode
 littleMaidMob.gui.toggle.freedom.disable=Switch to Folllow Mode
 
-littleMaidMob.gui.button.lock=Lock or unlock this maid's current mode
+littleMaidMob.gui.button.lock=Lock or unlock maid's mode
 
 littleMaidMob.gui.text.expboost=Experience Booster
 

@@ -2,6 +2,7 @@ package net.firis.lmt.client.renderer;
 
 import org.lwjgl.opengl.GL11;
 
+import net.blacklab.lmr.entity.maidmodel.ModelLittleMaidBase;
 import net.firis.lmt.client.event.ClientEventLMAvatar;
 import net.firis.lmt.client.model.ModelLittleMaidMultiModel;
 import net.firis.lmt.client.renderer.layer.LayerArmorLittleMaidMultiModel;
@@ -11,9 +12,11 @@ import net.firis.lmt.client.renderer.layer.LayerElytraLittleMaid;
 import net.firis.lmt.client.renderer.layer.LayerEntityOnShoulderLittleMaid;
 import net.firis.lmt.client.renderer.layer.LayerHeldItemLittleMaidMultiModel;
 import net.firis.lmt.common.manager.PlayerModelManager;
+import net.firis.lmt.config.FirisConfig;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelPlayer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
@@ -114,10 +117,9 @@ public class RendererMaidPlayerMultiModel extends RenderPlayer {
 	 */
 	@Override
 	public void doRender(AbstractClientPlayer entity, double x, double y, double z, float entityYaw, float partialTicks) {
-	
 		//パラメータを初期化
 		((ModelLittleMaidMultiModel) this.mainModel).initPlayerModel(entity, x, y, z, entityYaw, partialTicks);
-		
+
 		//法線の再計算
 		//GlStateManager.enableRescaleNormal();
 		//GL11.glEnable(GL12.GL_RESCALE_NORMAL);
