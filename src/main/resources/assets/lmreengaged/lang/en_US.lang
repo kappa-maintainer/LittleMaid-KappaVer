@@ -167,7 +167,7 @@ commands.lmcommand.call.failure=Looks like there is no maid nearby.
 commands.lmcommand.call.failure.maid=Looks like there is no %s nearby.
 commands.lmcommand.list.failure=Looks like there is no maid nearby.
 
-littlemaid.inventory.name=ROSE
+littlemaid.inventory.name=InsideSkirt
 
 item.player_maid_book.name=Player Maid Model
 
@@ -180,5 +180,11 @@ littleMaidMob.mode.F-LumberjackPort=Lumberjack Carry
 littleMaidMob.mode.F-SugarCanePort=SugarCane Carry
 littleMaidMob.mode.F-ShearerPort=Shearer Carry
 littleMaidMob.mode.F-AnglerPort=Angler Carry
+
+littleMaidMob.mode.T-FarmPort=Farm Carry(Trace RS)
+littleMaidMob.mode.T-LumberjackPort=Lumberjack Carry(Trace RS)
+littleMaidMob.mode.T-SugarCanePort=SugarCane Carry(Trace RS)
+littleMaidMob.mode.T-ShearerPort=Shearer Carry(Trace RS)
+littleMaidMob.mode.T-AnglerPort=Angler Carry(Trace RS)
 
 
