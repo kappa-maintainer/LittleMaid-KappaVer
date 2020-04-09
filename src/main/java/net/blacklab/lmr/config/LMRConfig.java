@@ -107,6 +107,12 @@ public class LMRConfig {
 	public static boolean cfg_is_arrows_pickable = false;
 	
 	public static boolean cfg_can_lock_modes = true;
+	/** ファイルローダー機能のキャッシュ機能のON/OFF設定 */
+	public static boolean cfg_loader_is_cache = true;
+	
+	/** sounds.jsonファイルの出力設定 */
+	public static boolean cfg_loader_output_sounds_json = false;
+	
 	/**
 	 * Config初期化
 	 */
@@ -234,6 +240,15 @@ public class LMRConfig {
 		String[] noCookingItemIds = new String[] {"minecraft:iron_sword", "minecraft:golden_sword"};
 		cfg_cock_no_cooking_item_ids = Arrays.asList(cfg.getStringList("NotCookingItemIds", "Cock", noCookingItemIds,
 				"Set the item ID that does not cook in the furnace."));
+		
+		
+		//ファイルローダー機能のキャッシュ機能設定
+		cfg_loader_is_cache = cfg.getBoolean("EnableFileLoaderCache", "Loader", true,
+				"Enable FileLoader Caching.");
+		
+		//sounds.jsonファイルの出力設定
+		cfg_loader_output_sounds_json = cfg.getBoolean("OutputSoundsJson", "Loader", false,
+				"Output sounds.json.");
 		
 		cfg.save();
 	}

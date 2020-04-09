@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import net.blacklab.lmr.config.LMRConfig;
 import net.blacklab.lmr.util.loader.resource.JsonResourceLittleMaidSound;
+import net.blacklab.lmr.util.loader.resource.ResourceFileHelper;
 
 /**
  * メイドさんのサウンド関連ファイルをロードする
@@ -35,7 +37,46 @@ public class LMSoundHandler implements ILMFileLoaderHandler {
 	/**
 	 * サウンドパック一覧
 	 */
-	public static List<JsonResourceLittleMaidSound> jsonSoundList = new ArrayList<>();
+	public static JsonResourceLittleMaidSound resourceLittleMaidSound = new JsonResourceLittleMaidSound();
+	
+	/**
+	 * キャッシュフラグ
+	 */
+	private boolean isCache = false;
+	
+	/**
+	 * キャッシュファイル名
+	 */
+	private String cacheFileName = "cache_soundpack.json";
+
+	/**
+	 * サウンドHandlerの初期化処理
+	 * キャッシュ確認しキャッシュがあれば読込する
+	 */
+	@Override
+	public void init() {
+		
+		//キャッシュ機能の利用可否
+		if (!LMRConfig.cfg_loader_is_cache) return;
+		
+		//キャッシュファイルの読み込み
+		resourceLittleMaidSound = ResourceFileHelper.readFromJson(this.cacheFileName, JsonResourceLittleMaidSound.class);
+		
+		if (resourceLittleMaidSound != null) {
+			this.isCache = true;
+		} else {
+			//初期化
+			resourceLittleMaidSound = new JsonResourceLittleMaidSound();
+		}
+	}
+	
+	/**
+	 * キャッシュがある場合は読み込み処理を行わない
+	 */
+	@Override
+	public boolean isFileLoad() {
+		return !this.isCache;
+	}
 	
 	/**
 	 * 対象ファイルがサウンド関連のファイルか判断する
@@ -44,7 +85,7 @@ public class LMSoundHandler implements ILMFileLoaderHandler {
 	 *　・サウンドファイルはzip or jar形式のもののみ対象とする
 	 */
 	@Override
-	public boolean isLoader(String path, Path filePath) {
+	public boolean isLoadHandler(String path, Path filePath) {
 		
 		//圧縮ファイル以外は除外
 		if (filePath == null) return false;
@@ -99,7 +140,6 @@ public class LMSoundHandler implements ILMFileLoaderHandler {
 	/**
 	 * Configファイルを処理する
 	 * 
-	 * Config
 	 */
 	protected void loadHandlerConfig(String path, String fileName, InputStream inputstream) {
 		
@@ -212,14 +252,14 @@ public class LMSoundHandler implements ILMFileLoaderHandler {
 			
 			//データが生成できた場合は保存する
 			if (voicePackageList.size() > 0) {
-				JsonResourceLittleMaidSound jsonSound = new JsonResourceLittleMaidSound();
-				jsonSound.voiceName = voicePackageName;
-				jsonSound.voiceRate = voiceRate;
-				jsonSound.voices = voicePackageList;
-
-				jsonSoundList.add(jsonSound);
-				
+				//サウンドパックを追加する
+				resourceLittleMaidSound.addSoundpack(voicePackageName, voiceRate, voicePackageList);
 			}
 		}
+		
+		//キャッシュファイルを出力する
+		if (LMRConfig.cfg_loader_is_cache) {
+			ResourceFileHelper.writeToJson(this.cacheFileName, resourceLittleMaidSound);
+		}	
 	}
 }
