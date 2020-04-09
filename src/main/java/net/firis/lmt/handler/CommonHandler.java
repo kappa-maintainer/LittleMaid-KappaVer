@@ -20,16 +20,17 @@ public class CommonHandler {
 	public void adjustSize(TickEvent.PlayerTickEvent event) {
 		if(FirisConfig.cfg_immersive_avatar) {
 			EntityPlayer player = event.player;
+			if(player.isPlayerSleeping() || player.isElytraFlying()) return;
 			ModelMultiBase playerModel = PlayerModelManager.getPlayerModel(player);
 			AxisAlignedBB box = player.getEntityBoundingBox();
 			double height = ((ModelLittleMaidBase)(playerModel)).getHeight();
 			double width = ((ModelLittleMaidBase)(playerModel)).getWidth();
 			double d0 = width / 2.0D;
-			double eyeheight = height * 0.85F;
+			double eyeheight;
 			if(player.isSneaking()) {
-				height *= 1.65D / 1.8D;
-				eyeheight *= 1.65D / 1.8D;
+				height *= 1.5D / 1.8D;
 			}
+			eyeheight = height - 0.25D;
 			try {
 				setSize.invoke(player, (float)width, (float)height);
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
