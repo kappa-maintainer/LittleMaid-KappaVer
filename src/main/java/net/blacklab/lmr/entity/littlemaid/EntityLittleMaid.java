@@ -1090,17 +1090,18 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 	}
 	*/
 
+	/*
 	@Override
 	public void playLivingSound() {
 		if (!getEntityWorld().isRemote) return;
 		// 普段の声
 		//LMM_LittleMaidMobNX.Debug("DEBUG INFO=tick %d", livingSoundTick);
 		//livingSoundTick--;
-		if(getAttackTarget()!=null/* || Math.random() > 0.3*/) return;
+		if(getAttackTarget()!=null/ * || Math.random() > 0.3 * /) return;
 		EnumSound so = EnumSound.Null;
 		if (getHealth() < 10)
 			so = EnumSound.living_whine;
-		else /*if (rand.nextFloat() < maidSoundRate) */{
+		else / * if (rand.nextFloat() < maidSoundRate) * /{
 			if (mstatTime > 23500 || mstatTime < 1500) {
 				so = EnumSound.living_morning;
 			} else if (mstatTime < 12500) {
@@ -1139,6 +1140,132 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		this.playLittleMaidVoiceSound(so, false);
 		//	livingSoundTick = 1;
 		//}
+	}
+	*/
+	
+	/**
+	 * メイドさんの普段の啼声
+	 */
+	@Override
+	public void playLivingSound() {
+		
+		//クライアントのみ
+		if (!getEntityWorld().isRemote) return;
+		
+		//戦闘中はしゃべらない
+		if(getAttackTarget() != null) return;
+		
+		//現在時刻
+		int worldtime = (int)(getEntityWorld().getWorldTime() % 24000);
+		
+		EnumSound sound = EnumSound.Null;
+		
+		//HPが低い時
+		if (getHealth() < 10) {
+			sound = EnumSound.living_whine;
+			
+		//天気による
+		} else if (getEntityWorld().isRaining()) {
+			Biome biome = world.getBiome(getPosition());
+			//雪か雨
+			if (biome.isSnowyBiome()) {
+				//雪の時
+				sound = EnumSound.living_snow;
+			} else {
+				//雨の時
+				sound = EnumSound.living_rain;
+			}
+		//おはようの挨拶
+		} else if (worldtime > 23500 || worldtime < 1500) {
+			sound = EnumSound.living_morning;
+		//こんにちはの挨拶
+		} else if (worldtime < 12500) {
+			sound = EnumSound.living_daytime;
+			
+			//バイオームの気温でセリフ変更
+			Biome biome = getEntityWorld().getBiome(getPosition());
+			TempCategory tempCategory = biome.getTempCategory();
+			if (tempCategory == TempCategory.COLD) {
+				sound = EnumSound.living_cold;
+			} else if (tempCategory == TempCategory.WARM) {
+				sound = EnumSound.living_hot;
+			}
+			
+		//こんばんはの挨拶
+		} else {
+			sound = EnumSound.living_night;
+		}
+		
+		LittleMaidReengaged.Debug("id:%d LivingSound:%s", getEntityId(), getEntityWorld() == null ? "null" : getEntityWorld().isRemote ? "Client" : "Server");
+		
+		//Sound設定
+		this.playLittleMaidVoiceSound(sound, true);
+	}
+	
+	/**
+	 * 時計もちメイドさんのVoiceフラグ
+	 * 0:リセット状態
+	 * 1:朝の挨拶後
+	 * 2:夜の挨拶後
+	 */
+	private int littleMaidClockVoiceFlg = 0;
+	
+	/**
+	 * 時計もちメイドさんの啼声
+	 */
+	public void playLivingSoundLittleMaidWithClock() {
+		
+		//サーバーで判断
+		if (getEntityWorld().isRemote) return;
+		
+		//1秒に1回だけ処理を行う
+		if (this.ticksExisted % 20 != 0) return;
+		
+		//契約メイドさんのみ
+		if (!this.isContractEX()) return;
+		
+		//戦闘中はしゃべらない
+		if(getAttackTarget() != null) return;
+		
+		//時計所持
+		if (maidInventory.getInventorySlotContainItem(Items.CLOCK) == -1) return;
+		
+		//ご主人さまとの距離
+		EntityPlayer player = getMaidMasterEntity();
+		if (player == null) return;
+		double masterDistanceSq = getDistanceSq(player);
+		
+		//5マス以上離れている場合は何もしない
+		double range = 5.0D * 5.0D;
+		if (masterDistanceSq > range) return;
+		
+		//視線が通っているか
+		if (!getEntitySenses().canSee(player)) return;
+		
+		EnumSound sound = EnumSound.Null;
+
+		//現在時刻
+		int worldtime = (int)(getEntityWorld().getWorldTime() % 24000);
+		
+		//時間帯によって変える
+		//6:00 - 7:30まで
+		if (littleMaidClockVoiceFlg != 1 && worldtime <= 1500) {
+			//朝の挨拶
+			sound = EnumSound.goodmorning;
+			littleMaidClockVoiceFlg = 1;
+			
+		//18:00 - 
+		} else if (littleMaidClockVoiceFlg != 2 && 12000 <= worldtime && player.isPlayerSleeping()) {
+			//おやすみなさい
+			sound = EnumSound.goodnight;
+			littleMaidClockVoiceFlg = 2;
+			
+		}
+		
+		//ボイス再生
+		if (sound != EnumSound.Null) {
+			playLittleMaidVoiceSound(sound, false);
+		}
 	}
 
 	@Override
@@ -2281,6 +2408,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 					}
 				}
 			}
+			/*
 			// 時計を持っている
 			// TODO:多分この辺りの処理はおかしい
 			if (isContractEX() && mstatClockMaid) {
@@ -2316,6 +2444,9 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 			} else {
 				mstatTime = 6000;
 			}
+			*/
+			//時計を持ったメイドさん
+			this.playLivingSoundLittleMaidWithClock();
 
 			// TNT-D System
 			maidOverDriveTime.onUpdate();
@@ -3333,7 +3464,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 							//getNavigator().clearPath();
 							//OwnableEntityHelper.setOwner(this, CommonHelper.getPlayerUUID(par1EntityPlayer));
 
-							playLittleMaidVoiceSound(EnumSound.getCake, true);
+							playLittleMaidVoiceSound(EnumSound.getCake, false);
 //							playLittleMaidSound(LMM_EnumSound.getCake, true);
 //							playTameEffect(true);
 							getEntityWorld().setEntityState(this, (byte)7);

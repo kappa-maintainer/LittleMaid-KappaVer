@@ -7,6 +7,7 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 
 import net.blacklab.lmr.entity.maidmodel.ModelLittleMaidBase;
+import net.blacklab.lmr.config.LMRConfig;
 import net.firis.lmt.client.event.ClientEventLMAvatar;
 import net.firis.lmt.client.model.ModelLittleMaidMultiModel;
 import net.firis.lmt.client.renderer.layer.LayerArmorLittleMaidMultiModel;
@@ -121,6 +122,7 @@ public class RendererMaidPlayerMultiModel extends RenderPlayer {
 		} else {
 			return this.layerRenderers.add((LayerRenderer<AbstractClientPlayer>)layer);
 		}
+	}
     }
 	
 	/**

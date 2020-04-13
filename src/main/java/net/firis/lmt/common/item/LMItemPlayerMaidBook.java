@@ -1,5 +1,9 @@
 package net.firis.lmt.common.item;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.blacklab.lmr.entity.littlemaid.EntityLittleMaid;
 import net.firis.lmt.common.capability.IMaidAvatar;
 import net.firis.lmt.common.capability.MaidAvatarProvider;
@@ -13,9 +17,9 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -24,6 +28,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import scala.reflect.internal.Trees.This;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class LMItemPlayerMaidBook extends Item {
 	
@@ -59,10 +64,12 @@ public class LMItemPlayerMaidBook extends Item {
 	 */
 	public void setDressUpPlayerFromMaid(EntityPlayer player, Entity entity) {
 		
+		if (!player.world.isRemote) return;
+		
 		if (!(entity instanceof EntityLittleMaid)) return;
 		
 		//対象のメイドさんからモデル情報を取得する
-		EntityLittleMaid enityMaid = (EntityLittleMaid) entity;
+		EntityLittleMaid entityMaid = (EntityLittleMaid) entity;
 		
 		//メイドモデル名取得
 		//String maidModelName = enityMaid.getTextureBox()[0].textureName;
@@ -70,26 +77,6 @@ public class LMItemPlayerMaidBook extends Item {
 		String maidModelName = enityMaid.getTextureNameMain();
 		String armorModelName = enityMaid.getTextureNameArmor();
 		int maidColor = enityMaid.getColor();
-		/*
-		//メイドさんのテクスチャ
-		String maidTexture = enityMaid.getTextures(0)[0].toString();
-		
-		//防具テクスチャ(頭防具から)
-		String armorTexture0 = enityMaid.getTextures(1)[0] == null ? "" : enityMaid.getTextures(1)[0].toString();
-		String armorTexture1 = enityMaid.getTextures(1)[1] == null ? "" : enityMaid.getTextures(1)[1].toString();
-		String armorTexture2 = enityMaid.getTextures(1)[2] == null ? "" : enityMaid.getTextures(1)[2].toString();
-		String armorTexture3 = enityMaid.getTextures(1)[3] == null ? "" : enityMaid.getTextures(1)[3].toString();
-		
-		NBTTagCompound nbt = player.getEntityData();
-		
-		nbt.setString("maidModel", maidModelName);
-		nbt.setString("armorModel", armorModelName);
-		nbt.setString("maidTexture", maidTexture);
-		nbt.setString("armorTexture0", armorTexture0);
-		nbt.setString("armorTexture1", armorTexture1);
-		nbt.setString("armorTexture2", armorTexture2);
-		nbt.setString("armorTexture3", armorTexture3);
-		*/
 		IMaidAvatar avatar = player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null);
 		avatar.setIsAvatarEnable(true);
 		avatar.setAvatarModel(maidModelName, maidColor, armorModelName, armorModelName, armorModelName, armorModelName);
@@ -137,5 +124,11 @@ public class LMItemPlayerMaidBook extends Item {
 		
 	}
 	
-
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
+    {
+		tooltip.add(TextFormatting.LIGHT_PURPLE + I18n.format("item.player_maid_book.info"));
+    }
 }
