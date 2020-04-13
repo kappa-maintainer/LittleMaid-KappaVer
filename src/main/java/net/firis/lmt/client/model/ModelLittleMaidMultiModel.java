@@ -8,19 +8,19 @@ import net.blacklab.lmr.entity.maidmodel.ModelLittleMaidBase;
 import net.blacklab.lmr.entity.maidmodel.ModelMultiBase;
 import net.blacklab.lmr.util.helper.RendererHelper;
 import net.firis.lmt.common.LMTCore;
+import net.firis.lmt.common.capability.MaidAvatarProvider;
 import net.firis.lmt.common.manager.PlayerModelManager;
 import net.firis.lmt.common.modelcaps.PlayerModelCaps;
 import net.firis.lmt.config.FirisConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -30,16 +30,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  *
  */
 @SideOnly(Side.CLIENT)
-public class ModelLittleMaidMultiModel extends ModelBase {
+public class ModelLittleMaidMultiModel extends ModelPlayer {
 
 	private PlayerModelCaps playerCaps = null;
 	private ModelMultiBase playerModel = null;
 	
-	private static Method setSize = ObfuscationReflectionHelper.findMethod(Entity.class, "func_70105_a", void.class, float.class, float.class);
 	/**
 	 * コンストラクタ
 	 */
-	public ModelLittleMaidMultiModel() {
+	public ModelLittleMaidMultiModel(float modelSize, boolean smallArmsIn) {
+		super(modelSize, smallArmsIn);
 	}
 	
 	/**
@@ -74,10 +74,10 @@ public class ModelLittleMaidMultiModel extends ModelBase {
 	 */
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
-		
+
 		//setRotationAngles		
 		playerModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, playerCaps);
-		
+
 	}
 	
 	/**
@@ -85,9 +85,10 @@ public class ModelLittleMaidMultiModel extends ModelBase {
 	 */
 	@Override
 	public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
-		
+
 		//setLivingAnimations
 		playerModel.setLivingAnimations(playerCaps, limbSwing, limbSwingAmount, partialTickTime);
+
 	}
 	
 	/**
@@ -97,7 +98,6 @@ public class ModelLittleMaidMultiModel extends ModelBase {
 	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
 	{
 		EntityPlayer player = (EntityPlayer) entityIn;
-		
 		GL11.glEnable(GL11.GL_NORMALIZE);
 		
 		Minecraft.getMinecraft().getTextureManager().bindTexture(PlayerModelManager.getPlayerTexture(player));
@@ -134,6 +134,7 @@ public class ModelLittleMaidMultiModel extends ModelBase {
 			GL11.glDepthMask(true);
 			
 		}
+
 		
 		
 	}

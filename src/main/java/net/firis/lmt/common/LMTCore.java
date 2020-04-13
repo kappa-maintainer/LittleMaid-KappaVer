@@ -11,6 +11,7 @@ import net.firis.lmt.client.renderer.RendererMaidPlayerMultiModel;
 import net.firis.lmt.common.item.LMItemPlayerMaidBook;
 import net.firis.lmt.config.ConfigChangedEventHandler;
 import net.firis.lmt.config.FirisConfig;
+import net.firis.lmt.network.PacketHandler;
 import net.firis.lmt.proxy.CommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -25,6 +26,7 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -107,22 +109,28 @@ public class LMTCore {
 		//Map<String, RenderPlayer> skinMap = Minecraft.getMinecraft().getRenderManager().skinMap;
 		Map<String, RenderPlayer> skinMap = ObfuscationReflectionHelper.getPrivateValue(RenderManager.class, 
 				Minecraft.getMinecraft().getRenderManager(), 
-				new String[] { "skinMap", "field_178636_l" });
+				"field_178636_l");
 		
 		RenderPlayer renderPlayer = skinMap.get("default");
 		//RendererMaidPlayer renderMaidPlayer = new RendererMaidPlayer(renderPlayer);
-		RendererMaidPlayerMultiModel renderMaidPlayer = new RendererMaidPlayerMultiModel(renderPlayer);
+		RendererMaidPlayerMultiModel renderMaidPlayer = new RendererMaidPlayerMultiModel(renderPlayer, false);
 		
 		
 		//Minecraft.getMinecraft().getRenderManager().playerRenderer = renderMaidPlayer;
 		ObfuscationReflectionHelper.setPrivateValue(RenderManager.class, 
 				Minecraft.getMinecraft().getRenderManager(),
 				renderMaidPlayer, 
-				new String[] { "playerRenderer", "field_178637_m" });
+				"field_178637_m" );
 		
 		skinMap.put("default", renderMaidPlayer);
+		renderPlayer = skinMap.get("slim");
+		renderMaidPlayer = new RendererMaidPlayerMultiModel(renderPlayer, true);
 		skinMap.put("slim", renderMaidPlayer);
 		
+		ObfuscationReflectionHelper.setPrivateValue(RenderManager.class, 
+				Minecraft.getMinecraft().getRenderManager(), 
+				skinMap,
+				"field_178636_l");
 		
 		//GuiConfig更新イベント登録
 		MinecraftForge.EVENT_BUS.register(ConfigChangedEventHandler.class);
@@ -173,6 +181,9 @@ public class LMTCore {
 		
 		if (!isLMTCore()) return;
 		
+		PacketHandler.registerMessages(LittleMaidReengaged.DOMAIN + "avatar");
+		
+
 		//設定読込
         FirisConfig.init(event.getModConfigurationDirectory());
         

@@ -3,9 +3,11 @@ package net.firis.lmt.client.renderer;
 import net.firis.lmt.client.model.ModelLittleMaidTest;
 import net.firis.lmt.client.renderer.layer.LayerArmorLittleMaidTest;
 import net.firis.lmt.client.renderer.layer.LayerHeldItemLittleMaidTest;
+import net.firis.lmt.common.capability.MaidAvatarProvider;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelPlayer;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -18,9 +20,9 @@ public class RendererMaidPlayer extends RenderPlayer {
 	
 	private static final ResourceLocation MAID_TEXTURES_DAMAGE = new ResourceLocation("textures/entity/playermaid/player_littlemaid_01.png");
 	
-	
-	protected static ModelBase dummyMainModel = new ModelPlayer(0.0F, false);
-	
+	protected static boolean useSmallArms = false;
+	protected static ModelBase dummyMainModel= new ModelPlayer(0.0F, false);
+
 	/**
 	 * コンストラクタ
 	 * @param renderManagerIn
@@ -28,9 +30,8 @@ public class RendererMaidPlayer extends RenderPlayer {
 	 * @param shadowSizeIn
 	 */
 	public RendererMaidPlayer(RenderPlayer renderPlayer) {
-		
-		super(renderPlayer.getRenderManager());
-		
+
+		super(renderPlayer.getRenderManager(), useSmallArms);
 		//初期化
 		this.layerRenderers.clear();
 		this.mainModel = new ModelLittleMaidTest();
@@ -47,12 +48,15 @@ public class RendererMaidPlayer extends RenderPlayer {
 	 */
 	@Override
 	public ResourceLocation getEntityTexture(AbstractClientPlayer entity) {
-		
-		if(entity.getHealth() <= 5) {
-			return MAID_TEXTURES_DAMAGE;
+		if(entity.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null).getIsAvatarEnable()) {
+			if(entity.getHealth() <= 5) {
+				return MAID_TEXTURES_DAMAGE;
+			}
+			
+			return MAID_TEXTURES;
+		} else {
+			return super.getEntityTexture(entity);
 		}
-		
-		return MAID_TEXTURES;
 	}
 	
 	/**

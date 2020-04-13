@@ -6,6 +6,8 @@ import java.util.List;
 import net.blacklab.lmr.entity.maidmodel.ModelMultiBase;
 import net.blacklab.lmr.entity.maidmodel.TextureBox;
 import net.blacklab.lmr.util.manager.ModelManager;
+import net.firis.lmt.common.capability.IMaidAvatar;
+import net.firis.lmt.common.capability.MaidAvatarProvider;
 import net.firis.lmt.config.FirisConfig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -65,7 +67,13 @@ public class PlayerModelManager {
 	 */
 	public static ModelMultiBase getPlayerModel(EntityPlayer player) {
 		
-		TextureBox textureBox = getPlayerTexureBox(player, FirisConfig.cfg_maid_model);
+		TextureBox textureBox;
+		if(FirisConfig.cfg_model_override) {
+			textureBox = getPlayerTexureBox(player, FirisConfig.cfg_maid_model);
+		} else {
+			IMaidAvatar avatar = player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null);
+			textureBox = getPlayerTexureBox(player, avatar.getMainModel());
+		}
 		
 		//メイドさん本体のモデルを返却する
 		return textureBox.models[0];
@@ -87,9 +95,16 @@ public class PlayerModelManager {
 		TextureBox textureBox = getPlayerTexureBox(player);
 		return textureBox.getTextureName(testTexureColorIndex);
 		*/
-		
-		TextureBox textureBox = getPlayerTexureBox(player, FirisConfig.cfg_maid_model);
-		ResourceLocation rlTexture = textureBox.getTextureName(FirisConfig.cfg_maid_color);
+		TextureBox textureBox;
+		ResourceLocation rlTexture;
+		if(FirisConfig.cfg_model_override) {
+			textureBox = getPlayerTexureBox(player, FirisConfig.cfg_maid_model);
+			rlTexture = textureBox.getTextureName(FirisConfig.cfg_maid_color);
+		} else {
+			IMaidAvatar avatar = player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null);
+			textureBox = getPlayerTexureBox(player, avatar.getMainModel());
+			rlTexture = textureBox.getTextureName(avatar.getModelColor());
+		}
 		if (rlTexture == null) {
 			rlTexture = textureBox.getTextureNameDefault();
 		}
@@ -98,8 +113,13 @@ public class PlayerModelManager {
 	}
 	
 	public static ResourceLocation getPlayerTextureLight(EntityPlayer player) {
-		
-		TextureBox textureBox = getPlayerTexureBox(player, FirisConfig.cfg_maid_model);
+		TextureBox textureBox;
+		if(FirisConfig.cfg_model_override) {
+			textureBox = getPlayerTexureBox(player, FirisConfig.cfg_maid_model);
+		} else {
+			IMaidAvatar avatar = player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null);
+			textureBox = getPlayerTexureBox(player, avatar.getMainModel());
+		}
 		ResourceLocation rlTexture = textureBox.getTextureName(19);
 		
 		return rlTexture;
@@ -131,20 +151,39 @@ public class PlayerModelManager {
 		*/
 		
 		String textureName = "";
-		switch (slot) {
-		case HEAD:
-			textureName = FirisConfig.cfg_armor_model_head;
-			break;
-		case CHEST:
-			textureName = FirisConfig.cfg_armor_model_body;
-			break;
-		case LEGS:
-			textureName = FirisConfig.cfg_armor_model_leg;
-			break;
-		case FEET:
-			textureName = FirisConfig.cfg_armor_model_boots;
-			break;
-		default:
+		if(FirisConfig.cfg_model_override) {
+			switch (slot) {
+			case HEAD:
+				textureName = FirisConfig.cfg_armor_model_head;
+				break;
+			case CHEST:
+				textureName = FirisConfig.cfg_armor_model_body;
+				break;
+			case LEGS:
+				textureName = FirisConfig.cfg_armor_model_leg;
+				break;
+			case FEET:
+				textureName = FirisConfig.cfg_armor_model_boots;
+				break;
+			default:
+			}
+		} else {
+			IMaidAvatar avatar = player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null);
+			switch (slot) {
+			case HEAD:
+				textureName = avatar.getArmorModel(EntityEquipmentSlot.HEAD);
+				break;
+			case CHEST:
+				textureName = avatar.getArmorModel(EntityEquipmentSlot.CHEST);
+				break;
+			case LEGS:
+				textureName = avatar.getArmorModel(EntityEquipmentSlot.LEGS);
+				break;
+			case FEET:
+				textureName = avatar.getArmorModel(EntityEquipmentSlot.FEET);
+				break;
+			default:
+			}
 		}
 		
 		TextureBox textureBox = getPlayerTexureBox(player, textureName);
@@ -183,20 +222,39 @@ public class PlayerModelManager {
 		*/
 		
 		String textureName = "";
-		switch (slot) {
-		case HEAD:
-			textureName = FirisConfig.cfg_armor_model_head;
-			break;
-		case CHEST:
-			textureName = FirisConfig.cfg_armor_model_body;
-			break;
-		case LEGS:
-			textureName = FirisConfig.cfg_armor_model_leg;
-			break;
-		case FEET:
-			textureName = FirisConfig.cfg_armor_model_boots;
-			break;
-		default:
+		if(FirisConfig.cfg_model_override) {
+			switch (slot) {
+			case HEAD:
+				textureName = FirisConfig.cfg_armor_model_head;
+				break;
+			case CHEST:
+				textureName = FirisConfig.cfg_armor_model_body;
+				break;
+			case LEGS:
+				textureName = FirisConfig.cfg_armor_model_leg;
+				break;
+			case FEET:
+				textureName = FirisConfig.cfg_armor_model_boots;
+				break;
+			default:
+			}
+		} else {
+			IMaidAvatar avatar = player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null);
+			switch (slot) {
+			case HEAD:
+				textureName = avatar.getArmorModel(EntityEquipmentSlot.HEAD);
+				break;
+			case CHEST:
+				textureName = avatar.getArmorModel(EntityEquipmentSlot.CHEST);
+				break;
+			case LEGS:
+				textureName = avatar.getArmorModel(EntityEquipmentSlot.LEGS);
+				break;
+			case FEET:
+				textureName = avatar.getArmorModel(EntityEquipmentSlot.FEET);
+				break;
+			default:
+			}
 		}
 		
 		TextureBox textureBox = getPlayerTexureBox(player, textureName);
@@ -234,20 +292,39 @@ public class PlayerModelManager {
 		*/
 		
 		String textureName = "";
-		switch (slot) {
-		case HEAD:
-			textureName = FirisConfig.cfg_armor_model_head;
-			break;
-		case CHEST:
-			textureName = FirisConfig.cfg_armor_model_body;
-			break;
-		case LEGS:
-			textureName = FirisConfig.cfg_armor_model_leg;
-			break;
-		case FEET:
-			textureName = FirisConfig.cfg_armor_model_boots;
-			break;
-		default:
+		if(FirisConfig.cfg_model_override) {
+			switch (slot) {
+			case HEAD:
+				textureName = FirisConfig.cfg_armor_model_head;
+				break;
+			case CHEST:
+				textureName = FirisConfig.cfg_armor_model_body;
+				break;
+			case LEGS:
+				textureName = FirisConfig.cfg_armor_model_leg;
+				break;
+			case FEET:
+				textureName = FirisConfig.cfg_armor_model_boots;
+				break;
+			default:
+			}
+		} else {
+			IMaidAvatar avatar = player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null);
+			switch (slot) {
+			case HEAD:
+				textureName = avatar.getArmorModel(EntityEquipmentSlot.HEAD);
+				break;
+			case CHEST:
+				textureName = avatar.getArmorModel(EntityEquipmentSlot.CHEST);
+				break;
+			case LEGS:
+				textureName = avatar.getArmorModel(EntityEquipmentSlot.LEGS);
+				break;
+			case FEET:
+				textureName = avatar.getArmorModel(EntityEquipmentSlot.FEET);
+				break;
+			default:
+			}
 		}
 		
 		TextureBox textureBox = getPlayerTexureBox(player, textureName);

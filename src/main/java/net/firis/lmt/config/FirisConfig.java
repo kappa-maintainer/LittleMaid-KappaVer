@@ -33,7 +33,7 @@ public class FirisConfig {
 	public static String cfg_armor_model_boots = "";
 	
 	public static Boolean cfg_immersive_avatar = true;
-	public static Boolean cfg_model_overridr = false;
+	public static Boolean cfg_model_override = false;
 	
 	public static void init(File configDir) {
 		
@@ -68,7 +68,7 @@ public class FirisConfig {
 		//General
 		
 		//--------------------------------------------------
-		cfg_model_overridr = config.getBoolean("01.ModelOverride", CATEGORY_AVATAR, 
+		cfg_model_override = config.getBoolean("01.ModelOverride", CATEGORY_AVATAR, 
 				false, "Force override all player models with following configs.");
 		
 		//PlayerMaidAvatar

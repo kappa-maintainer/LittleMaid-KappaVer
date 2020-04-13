@@ -4235,11 +4235,19 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		this.textureNameMain = modelNameMain;
 		refreshModels();
 	}
+	
+	public String getTextureNameMain() {
+		return this.textureNameMain;
+	}
 
 	public void setTextureNameArmor(String modelNameArmor) {
 		this.textureNameArmor = modelNameArmor;
 		refreshModels();
 	}
+	
+	public String getTextureNameArmor( ) {
+		return this.textureNameArmor;
+	} 
 
 	protected void refreshModels() {
 		String defName = ModelManager.instance.getRandomTextureString(rand);
