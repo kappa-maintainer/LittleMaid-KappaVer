@@ -174,6 +174,11 @@ public class RendererMaidPlayerMultiModel extends RenderPlayer {
 	public void doRender(AbstractClientPlayer entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		if(entity.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null).getIsAvatarEnable()) {
 			mainModel = maidModelBase;
+		if (!isRenderLMAvatar()) {
+			this.renderPlayer.doRender(entity, x, y, z, entityYaw, partialTicks);
+			return;
+		}
+		
 			//パラメータを初期化
 			((ModelLittleMaidMultiModel) this.mainModel).initPlayerModel(entity, x, y, z, entityYaw, partialTicks);
 	
