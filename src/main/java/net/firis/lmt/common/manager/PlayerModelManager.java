@@ -169,21 +169,9 @@ public class PlayerModelManager {
 			}
 		} else {
 			IMaidAvatar avatar = player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null);
-			switch (slot) {
-			case HEAD:
-				textureName = avatar.getArmorModel(EntityEquipmentSlot.HEAD);
-				break;
-			case CHEST:
-				textureName = avatar.getArmorModel(EntityEquipmentSlot.CHEST);
-				break;
-			case LEGS:
-				textureName = avatar.getArmorModel(EntityEquipmentSlot.LEGS);
-				break;
-			case FEET:
-				textureName = avatar.getArmorModel(EntityEquipmentSlot.FEET);
-				break;
-			default:
-			}
+			
+			textureName = avatar.getArmorModel();
+				
 		}
 		
 		TextureBox textureBox = getPlayerTexureBox(player, textureName);
@@ -240,21 +228,9 @@ public class PlayerModelManager {
 			}
 		} else {
 			IMaidAvatar avatar = player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null);
-			switch (slot) {
-			case HEAD:
-				textureName = avatar.getArmorModel(EntityEquipmentSlot.HEAD);
-				break;
-			case CHEST:
-				textureName = avatar.getArmorModel(EntityEquipmentSlot.CHEST);
-				break;
-			case LEGS:
-				textureName = avatar.getArmorModel(EntityEquipmentSlot.LEGS);
-				break;
-			case FEET:
-				textureName = avatar.getArmorModel(EntityEquipmentSlot.FEET);
-				break;
-			default:
-			}
+
+			textureName = avatar.getArmorModel();
+
 		}
 		
 		TextureBox textureBox = getPlayerTexureBox(player, textureName);
@@ -310,21 +286,9 @@ public class PlayerModelManager {
 			}
 		} else {
 			IMaidAvatar avatar = player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null);
-			switch (slot) {
-			case HEAD:
-				textureName = avatar.getArmorModel(EntityEquipmentSlot.HEAD);
-				break;
-			case CHEST:
-				textureName = avatar.getArmorModel(EntityEquipmentSlot.CHEST);
-				break;
-			case LEGS:
-				textureName = avatar.getArmorModel(EntityEquipmentSlot.LEGS);
-				break;
-			case FEET:
-				textureName = avatar.getArmorModel(EntityEquipmentSlot.FEET);
-				break;
-			default:
-			}
+
+			textureName = avatar.getArmorModel();
+
 		}
 		
 		TextureBox textureBox = getPlayerTexureBox(player, textureName);

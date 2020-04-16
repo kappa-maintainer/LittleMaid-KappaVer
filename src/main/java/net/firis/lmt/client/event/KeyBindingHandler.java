@@ -3,6 +3,7 @@ package net.firis.lmt.client.event;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -23,7 +24,7 @@ public class KeyBindingHandler {
 	 * Avatarアクション用
 	 * defalut:＠キー
 	 */
-	public static final KeyBinding keyLittleMaidAvatarAction = new KeyBinding("key.littlemaid.avatar.action", Keyboard.KEY_GRAVE, "advancements.root");
+	public static final KeyBinding keyLittleMaidAvatarAction = new KeyBinding(I18n.format("key.littlemaid.avatar.action"), Keyboard.KEY_GRAVE, "advancements.root");
 
 	/**
 	 * キーバインド初期化

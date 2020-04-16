@@ -1,25 +1,18 @@
 package net.firis.lmt.common.capability;
-
-import net.firis.lmt.config.FirisConfig;
-import net.minecraft.inventory.EntityEquipmentSlot;
-
+/**
+ * 
+ * Default
+ */
 public class MaidAvatar implements IMaidAvatar {
-	private String maidModel = DEFAULT_MAID_MODEL;
-	private int maidColor = 0;
-	private String maidArmorHead = DEFAULT_MAID_MODEL;
-	private String maidArmorChest = DEFAULT_MAID_MODEL;
-	private String maidArmorLegs = DEFAULT_MAID_MODEL;
-	private String maidArmorFeet = DEFAULT_MAID_MODEL;
+	private String maidModel = "";
+	private int maidColor = -1;
+	private String maidArmor = "";
 	private boolean avatarEnabled = false;
 	@Override
-	public void setAvatarModel(String maidModel, int maidColor, String maidArmorHead, String maidArmorChest,
-			String maidArmorLegs, String maidArmorFeet) {
+	public void setAvatarModel(String maidModel, int maidColor, String maidArmor) {
 		this.maidModel = maidModel;
 		this.maidColor = maidColor;
-		this.maidArmorHead = maidArmorHead;
-		this.maidArmorChest = maidArmorChest;
-		this.maidArmorLegs = maidArmorLegs;
-		this.maidArmorFeet = maidArmorFeet;
+		this.maidArmor = maidArmor;
 
 	}
 
@@ -34,19 +27,8 @@ public class MaidAvatar implements IMaidAvatar {
 	}
 
 	@Override
-	public String getArmorModel(EntityEquipmentSlot slot) {
-		switch (slot) {
-		case HEAD:
-			return maidArmorHead;
-		case CHEST:
-			return maidArmorChest;
-		case LEGS:
-			return maidArmorLegs;
-		case FEET:
-			return maidArmorLegs;
-		default:
-			return DEFAULT_MAID_MODEL;
-		}
+	public String getArmorModel() {
+		return maidArmor;
 	}
 
 	@Override

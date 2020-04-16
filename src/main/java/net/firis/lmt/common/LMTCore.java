@@ -8,9 +8,14 @@ import net.blacklab.lmr.config.LMRConfig;
 import net.firis.lmt.client.event.KeyBindingHandler;
 import net.firis.lmt.client.event.LittleMaidAvatarClientTickEventHandler;
 import net.firis.lmt.client.renderer.RendererMaidPlayerMultiModel;
+import net.firis.lmt.common.capability.IMaidAvatar;
+import net.firis.lmt.common.capability.MaidAvatar;
+import net.firis.lmt.common.capability.PlayerAvatarStorage;
 import net.firis.lmt.common.item.LMItemPlayerMaidBook;
 import net.firis.lmt.config.ConfigChangedEventHandler;
 import net.firis.lmt.config.FirisConfig;
+import net.firis.lmt.handler.CommonHandler;
+import net.firis.lmt.handler.MaidAvatarCapabilityHandler;
 import net.firis.lmt.network.PacketHandler;
 import net.firis.lmt.proxy.CommonProxy;
 import net.minecraft.client.Minecraft;
@@ -21,6 +26,7 @@ import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -171,6 +177,8 @@ public class LMTCore {
 	
 	public static void init(FMLInitializationEvent event) {
 		proxy.init();
+
+		
 	}
 	
 	/**

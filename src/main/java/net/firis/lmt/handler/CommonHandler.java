@@ -7,6 +7,7 @@ import net.blacklab.lmr.LittleMaidReengaged;
 import net.blacklab.lmr.config.LMRConfig;
 import net.blacklab.lmr.entity.maidmodel.ModelLittleMaidBase;
 import net.blacklab.lmr.entity.maidmodel.ModelMultiBase;
+import net.firis.lmt.common.LMTCore;
 import net.firis.lmt.common.capability.IMaidAvatar;
 import net.firis.lmt.common.capability.MaidAvatarProvider;
 import net.firis.lmt.common.manager.PlayerModelManager;
@@ -29,7 +30,7 @@ public class CommonHandler {
 	public void adjustSize(TickEvent.PlayerTickEvent event) {
 		EntityPlayer player = event.player;
 		if(FirisConfig.cfg_immersive_avatar &&
-				LMRConfig.cfg_prottype_maid_avatar &&
+				LMTCore.isLMTCore() &&
 				player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null).getIsAvatarEnable()) {
 			if(player.isPlayerSleeping() || player.isElytraFlying()) return;
 			ModelMultiBase playerModel = PlayerModelManager.getPlayerModel(player);

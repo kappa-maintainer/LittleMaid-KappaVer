@@ -52,7 +52,13 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.minecraftforge.items.wrapper.PlayerArmorInvWrapper;
+import net.minecraftforge.items.wrapper.PlayerInvWrapper;
+import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
+import net.minecraftforge.items.wrapper.PlayerOffhandInvWrapper;
 
 
 
@@ -68,7 +74,6 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 	private double appendX;
 	private double appendY;
 	private double appendZ;
-	private ItemStackHandler maidInventoryHandler;
 
 	public EntityLittleMaidAvatarMP(World par1World)
 	{
@@ -92,7 +97,6 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 		inventory = avatar.maidInventory;
 		inventory.player = this;
 		inventoryContainer = new ContainerInventoryLittleMaid(inventory, avatar.maidInventory, avatar);
-		maidInventoryHandler = new ItemStackHandler(inventory.getSizeInventory());
 	}
 
 	// 実績参照
@@ -105,37 +109,6 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 		}
 		return super.getStatFile();
 	}
-	
-    @Override
-    public boolean hasCapability(Capability<?> cap, EnumFacing facing) {
-        return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(cap, facing);
-    }
-	
-    @Override
-    public <T> T getCapability(Capability<T> cap, EnumFacing facing) {
-        int i;
-    	if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-        	for(i=0;i<maidInventoryHandler.getSlots();i++) {
-        		maidInventoryHandler.extractItem(i, 64, false);
-        	}
-        	if(facing==EnumFacing.NORTH) {
-        		for(i=0;i<=6;i++)
-        			if(maidInventoryHandler.getStackInSlot(i) != null)
-        				maidInventoryHandler.insertItem(i+18, inventory.getStackInSlot(i+18), false);
-        	}else if(facing==EnumFacing.UP) {
-        		for(i=0;i<18;i++)
-        			maidInventoryHandler.insertItem(i, inventory.getStackInSlot(i), false);
-        	}else {
-        		for(i=0;i<inventory.getSizeInventory();i++) {
-        			maidInventoryHandler.insertItem(i, inventory.getStackInSlot(i), false);
-        		}
-        	}
-        	
-            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(maidInventoryHandler);
-        } else {
-            return super.getCapability(cap, facing);
-        }
-    }
 
 
 	////////////////////////////////////////////////////////////////////////////////////
@@ -1024,22 +997,22 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
     //********************************************************************************
     // メイドさんインベントリ用Capability
     //********************************************************************************
-    private net.minecraftforge.items.IItemHandler playerMainHandler = null;
-    private net.minecraftforge.items.IItemHandler playerEquipmentHandler = null;
-    private net.minecraftforge.items.IItemHandler playerJoinedHandler = null;
+    private IItemHandler playerMainHandler = null;
+    private IItemHandler playerEquipmentHandler = null;
+    private IItemHandler playerJoinedHandler = null;
 
     @SuppressWarnings("unchecked")
     @Override
     @Nullable
-    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable net.minecraft.util.EnumFacing facing)
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
     {
-        if (capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
         {
         	//条件なし
         	//インベントリ全体
             if (facing == null) {
             	if (playerJoinedHandler == null) {
-            		playerJoinedHandler = new net.minecraftforge.items.wrapper.PlayerInvWrapper(this.avatar.maidInventory);
+            		playerJoinedHandler = new PlayerInvWrapper(this.avatar.maidInventory);
             	}
             	return (T) playerJoinedHandler;
             
@@ -1047,7 +1020,7 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
             //MainHandとOffHandのインベントリ
             } else if (facing.getAxis().isVertical()) {
             	if (playerMainHandler == null) {
-            		playerMainHandler = new net.minecraftforge.items.wrapper.PlayerMainInvWrapper(this.avatar.maidInventory);
+            		playerMainHandler = new PlayerMainInvWrapper(this.avatar.maidInventory);
             	}
             	return (T) playerMainHandler;
             	
@@ -1055,9 +1028,9 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
             //メインインベントリ
             } else if (facing.getAxis().isHorizontal()) {
             	if (playerEquipmentHandler == null) {
-            		playerEquipmentHandler = new net.minecraftforge.items.wrapper.CombinedInvWrapper(
-                            new net.minecraftforge.items.wrapper.PlayerArmorInvWrapper(this.avatar.maidInventory),
-                            new net.minecraftforge.items.wrapper.PlayerOffhandInvWrapper(this.avatar.maidInventory));
+            		playerEquipmentHandler = new CombinedInvWrapper(
+                            new PlayerArmorInvWrapper(this.avatar.maidInventory),
+                            new PlayerOffhandInvWrapper(this.avatar.maidInventory));
             	}
             	return (T) playerEquipmentHandler;
             }
@@ -1069,9 +1042,11 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
      * メイドさんのCapability判定
      */
     @Override
-    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.EnumFacing facing)
-    {
+    public boolean hasCapability(Capability<?> cap, EnumFacing facing) {
     	if (this.avatar == null) return false;
-    	return super.hasCapability(capability, facing);
+        return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(cap, facing);
     }
+	
+
+
 }

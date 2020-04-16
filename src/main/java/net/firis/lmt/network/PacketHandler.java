@@ -15,6 +15,7 @@ public class PacketHandler {
 	
 	public static void registerMessages() {
 		instance.registerMessage(AvatarUpdatePacket.Handler.class, AvatarUpdatePacket.class, nextID(), Side.CLIENT);
+		instance.registerMessage(AvatarUpdatePacket.Handler.class, AvatarUpdatePacket.class, nextID(), Side.SERVER);
 	}
 
 	private static int packetId = 0;

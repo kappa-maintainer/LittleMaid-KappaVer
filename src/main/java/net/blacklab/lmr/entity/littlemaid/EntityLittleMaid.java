@@ -164,7 +164,13 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.minecraftforge.items.wrapper.PlayerArmorInvWrapper;
+import net.minecraftforge.items.wrapper.PlayerInvWrapper;
+import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
+import net.minecraftforge.items.wrapper.PlayerOffhandInvWrapper;
 
 public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 
@@ -380,8 +386,6 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 	
 	private ModeTrigger modeTrigger;
 	
-	private ItemStackHandler maidInventoryHandler;
-	
 	// 音声関連をまとめるもの
 	public LittleMaidSoundManager soundManager = null;
 	
@@ -482,7 +486,6 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		setExperienceHandler(new ExperienceHandler(this));
 
 		
-		maidInventoryHandler = new ItemStackHandler(maidInventory.getSizeInventory());
 		/*
 		if(par1World.isRemote){
 			NBTTagCompound t = new NBTTagCompound();
@@ -502,30 +505,48 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
         return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(cap, facing);
     }
 	
+    //********************************************************************************
+    // メイドさんインベントリ用Capability
+    //********************************************************************************
+    private IItemHandler playerMainHandler = null;
+    private IItemHandler playerEquipmentHandler = null;
+    private IItemHandler playerJoinedHandler = null;
+
+    @SuppressWarnings("unchecked")
     @Override
-    public <T> T getCapability(Capability<T> cap, EnumFacing facing) {
-        int i;
-    	if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-        	for(i=0;i<maidInventoryHandler.getSlots();i++) {
-        		if(maidInventoryHandler.getStackInSlot(i) != null)
-        			maidInventoryHandler.extractItem(i, 64, false);
-        	}
-        	if(facing==EnumFacing.NORTH) {
-        		for(i=0;i<=6;i++)
-        			maidInventoryHandler.insertItem(i+18, maidInventory.getStackInSlot(i+18), false);
-        	}else if(facing==EnumFacing.UP) {
-        		for(i=0;i<18;i++)
-        			maidInventoryHandler.insertItem(i, maidInventory.getStackInSlot(i), false);
-        	}else {
-        		for(i=0;i<maidInventory.getSizeInventory();i++) {
-        			maidInventoryHandler.insertItem(i, maidInventory.getStackInSlot(i), false);
-        		}
-        	}
-        	
-            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(maidInventoryHandler);
-        } else {
-            return super.getCapability(cap, facing);
+    @Nullable
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
+    {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+        {
+        	//条件なし
+        	//インベントリ全体
+            if (facing == null) {
+            	if (playerJoinedHandler == null) {
+            		playerJoinedHandler = new PlayerInvWrapper(this.maidInventory);
+            	}
+            	return (T) playerJoinedHandler;
+            
+           	//up or down
+            //MainHandとOffHandのインベントリ
+            } else if (facing.getAxis().isVertical()) {
+            	if (playerMainHandler == null) {
+            		playerMainHandler = new PlayerMainInvWrapper(this.maidInventory);
+            	}
+            	return (T) playerMainHandler;
+            	
+            //north(方角)
+            //メインインベントリ
+            } else if (facing.getAxis().isHorizontal()) {
+            	if (playerEquipmentHandler == null) {
+            		playerEquipmentHandler = new CombinedInvWrapper(
+                            new PlayerArmorInvWrapper(this.maidInventory),
+                            new PlayerOffhandInvWrapper(this.maidInventory));
+            	}
+            	return (T) playerEquipmentHandler;
+            }
         }
+        return super.getCapability(capability, facing);
     }
 	
 	public IEntityLittleMaidAvatar getAvatarIF()

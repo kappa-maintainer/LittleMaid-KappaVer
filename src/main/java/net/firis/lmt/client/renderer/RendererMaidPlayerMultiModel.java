@@ -123,7 +123,7 @@ public class RendererMaidPlayerMultiModel extends RenderPlayer {
 			return this.layerRenderers.add((LayerRenderer<AbstractClientPlayer>)layer);
 		}
 	}
-    }
+    
 	
 	/**
 	 * バインド用のテクスチャ

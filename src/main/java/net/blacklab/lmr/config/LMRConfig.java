@@ -102,7 +102,7 @@ public class LMRConfig {
 	public static boolean cfg_developer_test_module = false;
 	
 	/** メイドアバター */
-	public static boolean cfg_lmabatar_maid_avatar = false;
+	public static boolean cfg_lmabatar_maid_avatar = true;
 	
 	public static boolean cfg_is_arrows_pickable = false;
 	
