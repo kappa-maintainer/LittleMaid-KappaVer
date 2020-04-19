@@ -2,6 +2,9 @@ package net.firis.lmt.client.event;
 
 import org.lwjgl.input.Keyboard;
 
+import net.firis.lmt.common.capability.MaidAvatarProvider;
+import net.firis.lmt.network.MaidSittingUpdatePacket;
+import net.firis.lmt.network.PacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
@@ -44,6 +47,9 @@ public class KeyBindingHandler {
 			//アクションの制御はすべてClient側で行う
 			EntityPlayer player = Minecraft.getMinecraft().player;
 			LittleMaidAvatarClientTickEventHandler.lmAvatarAction.setStat(player, true);
+			if(player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null).getIsSitting() == false)
+				player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null).setIsSitting(true);
+				PacketHandler.instance.sendToServer(new MaidSittingUpdatePacket(player.getEntityId(), true));
 		}
 	}
 	

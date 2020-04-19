@@ -4,7 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import net.firis.lmt.common.capability.IMaidAvatar;
+import net.firis.lmt.common.capability.MaidAvatarProvider;
 import net.firis.lmt.common.modelcaps.PlayerModelCaps;
+import net.firis.lmt.network.MaidSittingUpdatePacket;
+import net.firis.lmt.network.MaidWaitingUpdatePacket;
+import net.firis.lmt.network.PacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -75,10 +80,11 @@ public class LittleMaidAvatarClientTickEventHandler {
 		boolean isMotionWaitReset = false;
 		
 		EntityPlayer player = Minecraft.getMinecraft().player;
+		IMaidAvatar avatar = player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null);
 		
 		//アクション解除
 		//腕振り
-		if (!isMotionWaitReset && player.swingProgress != 0.0F) {
+		if (!isMotionWaitReset && (player.swingProgress > 0.01F || player.swingProgress < -0.01F)) {
 			isMotionWaitReset = true;
 		}
 		
@@ -93,8 +99,9 @@ public class LittleMaidAvatarClientTickEventHandler {
 		//アクション解除
 		//縦方向は重力が発生してるので微調整して判断
 		if (!isMotionWaitReset || !isMotionSittingReset) {
-			if (player.motionX != 0.0D || player.motionZ != 0.0D
-					|| player.motionY > 0.0D) {
+			if (player.motionX > 0.01D || player.motionX < -0.01D
+					|| player.motionZ > 0.01D || player.motionZ < -0.01D
+					|| player.motionY > 0.01D) {
 				isMotionWaitReset = true;
 				isMotionSittingReset = true;
 			}
@@ -103,11 +110,15 @@ public class LittleMaidAvatarClientTickEventHandler {
 		if (isMotionWaitReset) {
 			//待機モーションリセット
 			lmAvatarWaitAction.setStat(player, false);
+			avatar.setIsWaiting(false);
+			PacketHandler.instance.sendToServer(new MaidWaitingUpdatePacket(player.getEntityId(), false));
 			lmAvatarWaitCounter.setStat(player, player.ticksExisted);
 		}
 		if (isMotionSittingReset) {
 			//お座りモーションリセット
 			lmAvatarAction.setStat(player, false);
+			avatar.setIsSitting(false);
+			PacketHandler.instance.sendToServer(new MaidSittingUpdatePacket(player.getEntityId(), false));
 		}
 		
 		if (!isMotionWaitReset && !isMotionSittingReset) {

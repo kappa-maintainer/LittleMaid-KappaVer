@@ -41,7 +41,7 @@ public class CommonHandler {
 			double eyeheight;
 			eyeheight = height - 0.25D;
 			if(player.isSneaking()) {
-				height *= 1.5D / 1.8D;
+				//height *= 1.5D / 1.8D;
 				eyeheight = height - 0.17D;
 			}
 			try {

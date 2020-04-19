@@ -18,7 +18,8 @@ public class PlayerAvatarStorage implements IStorage<IMaidAvatar>{
 		modelCompound.setInteger("Color", instance.getModelColor());
 		modelCompound.setString("Armor", instance.getArmorModel());
 		modelCompound.setBoolean("Enabled", instance.getIsAvatarEnable());
-
+		modelCompound.setBoolean("Sit", instance.getIsSitting());
+		modelCompound.setBoolean("Wait", instance.getIsWaiting());
 		return modelCompound;
 	}
 
@@ -26,8 +27,11 @@ public class PlayerAvatarStorage implements IStorage<IMaidAvatar>{
 	public void readNBT(Capability<IMaidAvatar> capability, IMaidAvatar instance, EnumFacing side, NBTBase nbt) {
 		NBTTagCompound modelnbt = (NBTTagCompound)nbt;
 		instance.setIsAvatarEnable(modelnbt.getBoolean("Enabled"));
-		instance.setAvatarModel(modelnbt.getString("Main"), modelnbt.getInteger("Color"), modelnbt.getString("Armor"));
-		
+		instance.setMainModel(modelnbt.getString("Main"));
+		instance.setColor(modelnbt.getInteger("Color"));
+		instance.setArmorModel(modelnbt.getString("Armor"));
+		instance.setIsSitting(modelnbt.getBoolean("Sit"));
+		instance.setIsWaiting(modelnbt.getBoolean("Wait"));
 	}
 
 }

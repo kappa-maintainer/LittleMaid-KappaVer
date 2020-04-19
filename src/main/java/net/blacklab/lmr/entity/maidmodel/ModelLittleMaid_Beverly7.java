@@ -7,8 +7,11 @@ import net.blacklab.lmr.entity.maidmodel.IModelCaps;
 import net.blacklab.lmr.entity.maidmodel.ModelCapsHelper;
 import net.blacklab.lmr.entity.maidmodel.ModelLittleMaidBase;
 import net.blacklab.lmr.entity.maidmodel.ModelRenderer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.entity.passive.EntityAnimal;
 
 /**
@@ -42,6 +45,7 @@ public class ModelLittleMaid_Beverly7 extends ModelLittleMaidBase {
 	
 	private boolean atInitialRotations;
 
+	public boolean airBlockOnTop;
 	/**
 	 * �R���X�g���N�^�͑S�Čp�������邱��
 	 */
@@ -219,13 +223,25 @@ public class ModelLittleMaid_Beverly7 extends ModelLittleMaidBase {
 	@Override
 	public float getHeight()
 	{
+		if(isSneak && !isWait && !motionSitting) {
+			return 1.8125F;
+		}
+		if(motionSitting || isSneak && isWait || !airBlockOnTop && isWait) {
+			if(!isSneak) {
+				return 1.75F;
+			}
+			return 1.625F;
+		}
+		if(!airBlockOnTop) {
+			return 1.9175F;
+		}
 		return 1.99F;
 	}
 	
 	@Override
 	public float getHeight(IModelCaps pEntityCaps)
 	{
-		return 1.99F;
+		return getHeight();
 	}
 
 	@Override
@@ -440,7 +456,7 @@ public class ModelLittleMaid_Beverly7 extends ModelLittleMaidBase {
 	{
 		if(!atInitialRotations)
 			return;
-		
+		airBlockOnTop = ModelCapsHelper.getCapsValueBoolean(pEntityCaps, caps_PosBlockAir, 0D, 2D, 0D);
 		//�����
 		bipedHead.rotateAngleY += pheadYaw / 57.29578F;
 		bipedHead.rotateAngleX += pheadPitch / 57.29578F;
@@ -456,7 +472,7 @@ public class ModelLittleMaid_Beverly7 extends ModelLittleMaidBase {
 			BunchL.rotateAngleZ -= bipedHead.rotateAngleZ * 0.2F;
 		}
 
-		if (isRiding)
+		if (isRiding && !motionSitting)
 		{
 			// �w�����Ă���
 			EntityLivingBase ent = (EntityLivingBase)ModelCapsHelper.getCapsValue(pEntityCaps, caps_Entity);
@@ -521,9 +537,9 @@ public class ModelLittleMaid_Beverly7 extends ModelLittleMaidBase {
 		}
 		else
 		{
-			if (isSneak || !ModelCapsHelper.getCapsValueBoolean(pEntityCaps, caps_PosBlockAir, 0D, 2D, 0D)) //���Ⴊ�� ���㒍��
+			if (isSneak || !airBlockOnTop || motionSitting) //���Ⴊ�� ���㒍��
 			{
-				if (isWait)
+				if (isWait || motionSitting)
 				{//�G����
 					upperRightLeg.rotateAngleX -= 0.1F;
 					upperLeftLeg.rotateAngleX -= 0.2F;
@@ -646,7 +662,7 @@ public class ModelLittleMaid_Beverly7 extends ModelLittleMaidBase {
 			}
 		}
 
-		if (isWait)
+		if (isWait || motionSitting)
 		{// �ҋ@��� �r
 			upperRightArm.rotateAngleX += (float)Math.sin(ticksExisted * 0.057F) * 0.05F - 0.5F;
 			upperRightArm.rotateAngleZ -= 0.3F;
@@ -745,5 +761,5 @@ public class ModelLittleMaid_Beverly7 extends ModelLittleMaidBase {
 		
 		atInitialRotations = false;
 	}
-
+	
 }

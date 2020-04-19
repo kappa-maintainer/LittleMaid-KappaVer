@@ -132,11 +132,7 @@ public class LMTCore {
 		renderPlayer = skinMap.get("slim");
 		renderMaidPlayer = new RendererMaidPlayerMultiModel(renderPlayer, true);
 		skinMap.put("slim", renderMaidPlayer);
-		
-		ObfuscationReflectionHelper.setPrivateValue(RenderManager.class, 
-				Minecraft.getMinecraft().getRenderManager(), 
-				skinMap,
-				"field_178636_l");
+
 		
 		//GuiConfig更新イベント登録
 		MinecraftForge.EVENT_BUS.register(ConfigChangedEventHandler.class);

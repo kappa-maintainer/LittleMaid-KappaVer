@@ -219,6 +219,15 @@ public class ModelLittleMaid_Chloe2 extends ModelLittleMaidBase {
 	@Override
 	public float getHeight()
 	{
+		if(isSneak && !isWait && !motionSitting) {
+			return 1.625F;
+		}
+		if(motionSitting || isSneak && isWait) {
+			if(!isSneak) {
+				return 1.5F;
+			}
+			return 1.375F;
+		}
 		return 1.8F;
 	}
 
@@ -444,7 +453,7 @@ public class ModelLittleMaid_Chloe2 extends ModelLittleMaidBase {
 			BunchL.rotateAngleZ -= bipedHead.rotateAngleZ * 0.2F;
 		}
 
-		if (isRiding)
+		if (isRiding && !motionSitting)
 		{
 			// �w�����Ă���
 			EntityLivingBase ent = (EntityLivingBase)ModelCapsHelper.getCapsValue(pEntityCaps, caps_Entity);
@@ -509,9 +518,9 @@ public class ModelLittleMaid_Chloe2 extends ModelLittleMaidBase {
 		}
 		else
 		{
-			if (isSneak) //���Ⴊ��
+			if (isSneak || motionSitting) //���Ⴊ��
 			{
-				if (isWait)
+				if (isWait || motionSitting)
 				{//�G����
 					upperRightLeg.rotateAngleX -= 0.1F;
 					upperLeftLeg.rotateAngleX -= 0.2F;
@@ -634,7 +643,7 @@ public class ModelLittleMaid_Chloe2 extends ModelLittleMaidBase {
 			}
 		}
 
-		if (isWait)
+		if (isWait || motionSitting)
 		{// �ҋ@��� �r
 			upperRightArm.rotateAngleX += (float)Math.sin(ticksExisted * 0.060F) * 0.05F - 0.5F;
 			upperRightArm.rotateAngleZ -= 0.3F;

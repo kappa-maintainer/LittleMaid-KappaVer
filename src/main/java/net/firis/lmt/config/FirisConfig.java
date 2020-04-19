@@ -98,11 +98,6 @@ public class FirisConfig {
 				DEFAULT_MAID_MODEL, 
 				"靴防具モデル名");
 		
-		//LMAvatar有効化無効化
-		cfg_enable_lmavatar = config.getBoolean("07.EnableLMAvatar", CATEGORY_AVATAR,
-				true, 
-				"LMアバターの反映");
-		
 		cfg_immersive_avatar = config.getBoolean("02.ImmersiveAvatar", CATEGORY_AVATAR, 
 				true, "Change avatar's bounding box and view height to maid's");
 		config.save();

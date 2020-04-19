@@ -10,7 +10,11 @@ import net.firis.lmt.common.DefaultBoxSwitcher;
 import net.firis.lmt.common.capability.IMaidAvatar;
 import net.firis.lmt.common.capability.MaidAvatarProvider;
 import net.firis.lmt.handler.CommonHandler;
+import net.firis.lmt.network.ArmorModelUpdatePacket;
+import net.firis.lmt.network.AvatarSwitchPacket;
 import net.firis.lmt.network.AvatarUpdatePacket;
+import net.firis.lmt.network.MaidColorUpdatePacket;
+import net.firis.lmt.network.MainModelUpdatePacket;
 import net.firis.lmt.network.PacketHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
@@ -54,12 +58,6 @@ public class LMItemPlayerMaidBook extends Item {
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)
     {
 		setDressUpPlayerFromMaid(player, entity);
-		if(entity instanceof EntityPlayer) {
-			EntityPlayer targetPlayer = (EntityPlayer)entity;
-			String mainModel = targetPlayer.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null).getMainModel();
-			String armorModel = targetPlayer.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null).getArmorModel();
-			player.sendMessage(new TextComponentString(mainModel + "//n" +armorModel));
-		}
 		return true;
     }
 	
@@ -96,11 +94,17 @@ public class LMItemPlayerMaidBook extends Item {
 		String armorModelName = entityMaid.getTextureNameArmor();
 		int maidColor = entityMaid.getColor();
 		IMaidAvatar avatar = player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null);
-		if(avatar.getIsAvatarEnable() == true &&
-				avatar.getMainModel().equals(maidModelName) &&
-				avatar.getModelColor() == maidColor &&
-				avatar.getArmorModel().equals(armorModelName))return;
-		PacketHandler.instance.sendToServer(new AvatarUpdatePacket(player.getEntityId(), maidModelName, maidColor, armorModelName, true));
+		
+		int playerID = player.getEntityId();
+		if(avatar.getIsAvatarEnable() == false)
+			PacketHandler.instance.sendToServer(new AvatarSwitchPacket(playerID, true));
+		if(!avatar.getMainModel().equals(maidModelName)) 
+			PacketHandler.instance.sendToServer(new MainModelUpdatePacket(playerID, maidModelName));
+		if(avatar.getModelColor() != maidColor)
+			PacketHandler.instance.sendToServer(new MaidColorUpdatePacket(playerID, maidColor));
+		if(!avatar.getArmorModel().equals(armorModelName))
+			PacketHandler.instance.sendToServer(new ArmorModelUpdatePacket(playerID, armorModelName));
+		
 	}
 	@Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
@@ -112,7 +116,7 @@ public class LMItemPlayerMaidBook extends Item {
 		IMaidAvatar avatar = playerIn.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null);
 		if(avatar.getModelColor() < 0)return new ActionResult<ItemStack>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
 		boolean current = avatar.getIsAvatarEnable();
-		PacketHandler.instance.sendToServer(new AvatarUpdatePacket(playerIn.getEntityId(), avatar.getMainModel(), avatar.getModelColor(), avatar.getArmorModel(), !current));
+		PacketHandler.instance.sendToServer(new AvatarSwitchPacket(playerIn.getEntityId(), !current));
 		
 		if(current == true) {
 			DefaultBoxSwitcher.setDefaultBox(playerIn);

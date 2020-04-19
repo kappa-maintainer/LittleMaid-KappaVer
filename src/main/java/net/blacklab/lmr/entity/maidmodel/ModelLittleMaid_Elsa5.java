@@ -163,6 +163,15 @@ public class ModelLittleMaid_Elsa5 extends ModelLittleMaidBase {
 	@Override
 	public float getHeight()
 	{
+		if(motionSitting && !isSneak) {
+			return 1.375F;
+		} 
+		if(!motionSitting && isSneak) {
+			return 1.4375F;
+		}
+		if(motionSitting && isSneak) {
+			return 1.1875F;
+		}
 		return 1.75F;
 	}
 
@@ -351,6 +360,11 @@ public class ModelLittleMaid_Elsa5 extends ModelLittleMaidBase {
 			hemSkirt.rotateAngleX -= 0.9F;
 			mainFrame.rotationPointZ += 1.5F;
 		}
+		
+		if (motionSitting && isRiding) {
+			mainFrame.rotationPointY += 5.00F;
+		}
+
 
 		// �A�C�e�������Ă�Ƃ��̘r�U���}����+�\���p�I�t�Z�b�g
 		if (heldItemLeft != 0)

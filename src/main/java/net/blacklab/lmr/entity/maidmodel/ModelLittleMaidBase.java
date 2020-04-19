@@ -120,6 +120,15 @@ public abstract class ModelLittleMaidBase extends ModelMultiMMMBase {
 
 	@Override
 	public float getHeight() {
+		if(motionSitting && !isSneak) {
+			return 1.10F;
+		} 
+		if(!motionSitting && isSneak) {
+			return 1.1875F;
+		}
+		if(motionSitting && isSneak) {
+			return 0.875F;
+		}
 		return 1.35F;
 	}
 
