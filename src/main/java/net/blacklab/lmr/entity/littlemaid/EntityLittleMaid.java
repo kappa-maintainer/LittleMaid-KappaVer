@@ -1747,7 +1747,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 
 		LittleMaidReengaged.Debug("READ %s %s", textureNameMain, textureNameArmor);
 
-		onInventoryChanged();
+		this.onInventoryChanged();
 		isWildSaved = par1nbtTagCompound.getBoolean("isWildSaved");
 		setMaidArmorVisible(par1nbtTagCompound.hasKey("maidArmorVisible")?par1nbtTagCompound.getInteger("maidArmorVisible"):15);
 //		syncMaidArmorVisible();
@@ -2703,10 +2703,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		isSwingInProgress = maidAvatar.isSwingInProgress = lmss.isSwingInProgress;
 
 		// 持ち物の確認
-		if (maidInventory.inventoryChanged) {
-			onInventoryChanged();
-			maidInventory.inventoryChanged = false;
-		}
+		this.onInventoryChanged();
 
 		if (!getEntityWorld().isRemote) {
 			// サーバー側処理
@@ -2889,6 +2886,11 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 	 *  インベントリが変更されました。
 	 */
 	public void onInventoryChanged() {
+		
+		if (!this.maidInventory.inventoryChanged) {
+			return;
+		}
+		
 		checkClockMaid();
 		checkHeadMount();
 		if (getActiveModeClass() != null && !getHandSlotForModeChange().isEmpty())
@@ -2896,8 +2898,16 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 					maidInventory.isChanged(InventoryLittleMaid.handInventoryOffset + 1))) {
 				setMaidModeAuto(getMaidMasterEntity());
 			}
-		getNextEquipItem();
-
+		//同期処理
+		//インベントリの同期
+		LMRNetwork.syncLittleMaidInventory(this);
+		
+		this.getNextEquipItem();
+		
+		
+		//フラグリセット
+		this.maidInventory.inventoryChanged = false;
+		
 //		setArmorTextureValue();
 	}
 
@@ -3790,10 +3800,6 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 //		int li = maidMode & 0x0080;
 		setMaidWaitCount(50);
 		
-		//インベントリの同期
-		LMRNetwork.syncLittleMaidInventory(this);
-		this.getNextEquipItem();
-
 		//Inventory Change
 		maidInventory.inventoryChanged = true;
 	}
