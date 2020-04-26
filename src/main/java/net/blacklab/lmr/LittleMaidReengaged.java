@@ -75,7 +75,7 @@ public class LittleMaidReengaged {
 
 	public static final String DOMAIN = "lmreengaged";
 	public static final String NAME = "LittleMaidReengaged";
-	public static final String VERSION = "8.1.6.141.fp.032";
+	public static final String VERSION = "8.1.6.141.fp.033";
 	public static final String ACCEPTED_MCVERSION = "[1.12.2]";
 	public static final String DEPENDENCIES = "required-after:forge@[1.12.2-14.23.5.2768,);";
 
@@ -528,6 +528,8 @@ public class LittleMaidReengaged {
 		//メイドさんコマンドの追加
 		event.registerServerCommand(new LMCommand());
 		
+		//リトルメイドテスト用モジュール
+    	LMTCore.serverStatingEvent(event);
 	}
      
     

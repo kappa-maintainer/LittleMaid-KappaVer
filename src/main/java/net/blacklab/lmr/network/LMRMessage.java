@@ -122,7 +122,10 @@ public class LMRMessage implements IMessage
 		SERVER_CHANGE_MODE_LOCK (0x31,  true),
 		
 		/** メイドさんのインベントリ同期 */
-		SERVER_LITTLE_MAID_INVENTORY(0x41,  true);
+		SERVER_LITTLE_MAID_INVENTORY(0x41,  true),
+			
+		/** クライアント側でコマンド実行 */
+		CLIENT_COMMAND_EXECUTE(0x51,  false);
 
 		public byte modeByte;
 		public boolean withEntity;
