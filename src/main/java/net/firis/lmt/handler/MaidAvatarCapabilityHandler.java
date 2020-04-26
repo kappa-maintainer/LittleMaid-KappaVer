@@ -2,19 +2,21 @@ package net.firis.lmt.handler;
 
 
 import net.blacklab.lmr.LittleMaidReengaged;
-import net.blacklab.lmr.entity.littlemaid.EntityLittleMaidAvatarMP;
-import net.blacklab.lmr.entity.littlemaid.IEntityLittleMaidAvatar;
 import net.firis.lmt.common.capability.IMaidAvatar;
 import net.firis.lmt.common.capability.MaidAvatarProvider;
-import net.firis.lmt.network.*;
+import net.firis.lmt.network.ArmorModelUpdatePacket;
+import net.firis.lmt.network.AvatarSwitchPacket;
+import net.firis.lmt.network.MaidColorUpdatePacket;
+import net.firis.lmt.network.MaidSittingUpdatePacket;
+import net.firis.lmt.network.MaidWaitingUpdatePacket;
+import net.firis.lmt.network.MainModelUpdatePacket;
+import net.firis.lmt.network.PacketHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -97,7 +99,9 @@ public class MaidAvatarCapabilityHandler {
 		IMaidAvatar oldAvatar = event.getOriginal().getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null);
 		IMaidAvatar newAvatar = event.getEntityPlayer().getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null);
 		newAvatar.setIsAvatarEnable(oldAvatar.getIsAvatarEnable());
-		newAvatar.setAvatarModel(oldAvatar.getMainModel(), oldAvatar.getModelColor(), oldAvatar.getArmorModel());
+		newAvatar.setMainModel(oldAvatar.getMainModel());
+		newAvatar.setColor(oldAvatar.getModelColor());
+		newAvatar.setArmorModel(oldAvatar.getArmorModel());
 		newAvatar.setIsSitting(oldAvatar.getIsSitting());
 		newAvatar.setIsWaiting(oldAvatar.getIsWaiting());
 	}

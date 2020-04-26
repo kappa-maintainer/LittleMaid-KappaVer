@@ -1,8 +1,8 @@
 package net.blacklab.lmr.entity.maidmodel;
 
-import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
+
+import net.minecraft.util.ResourceLocation;
 
 public class MMM_ModelStabilizer_WitchHat extends ModelStabilizerBase {
 

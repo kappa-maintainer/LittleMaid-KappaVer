@@ -1,11 +1,9 @@
 package net.firis.lmt.client.event;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
+import net.blacklab.lmr.entity.maidmodel.ModelMultiBase;
 import net.firis.lmt.common.capability.IMaidAvatar;
 import net.firis.lmt.common.capability.MaidAvatarProvider;
+import net.firis.lmt.common.manager.PlayerModelManager;
 import net.firis.lmt.common.modelcaps.PlayerModelCaps;
 import net.firis.lmt.network.MaidSittingUpdatePacket;
 import net.firis.lmt.network.MaidWaitingUpdatePacket;
@@ -14,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -22,45 +21,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class LittleMaidAvatarClientTickEventHandler {
-	
-	/**
-	 * 管理用クラス
-	 * @param <T>
-	 */
-	public static class PlayerStat<T> {
-		protected Map<UUID, T> statMap = new HashMap<UUID, T>();
-		protected T defaultValue;
-		public PlayerStat() {
-			defaultValue = null;
-		}
-		public PlayerStat(T def) {
-			defaultValue = def;
-		}
-		
-		public T getStat(EntityPlayer player) {
-			T stat = defaultValue;
-			if (statMap.containsKey(player.getUniqueID())) {
-				stat = statMap.get(player.getUniqueID());
-			}
-			return stat;
-		}
-		public void setStat(EntityPlayer player, T value) {
-			statMap.put(player.getUniqueID(), value);
-		}
-		
-	}
-	
-	/**
-	 * アクションキーの保存
-	 */
-	public static PlayerStat<Boolean> lmAvatarAction = new PlayerStat<Boolean>(false);
-
-	/**
-	 * アクションキーの保存
-	 */
-	public static PlayerStat<Boolean> lmAvatarWaitAction = new PlayerStat<Boolean>(false);
-	public static PlayerStat<Integer> lmAvatarWaitCounter = new PlayerStat<Integer>(0);
-
 	
 	@SubscribeEvent
 	public static void onClientTickEvent(ClientTickEvent event) {
@@ -102,21 +62,34 @@ public class LittleMaidAvatarClientTickEventHandler {
 			if (player.motionX > 0.01D || player.motionX < -0.01D
 					|| player.motionZ > 0.01D || player.motionZ < -0.01D
 					|| player.motionY > 0.01D) {
-				isMotionWaitReset = true;
-				isMotionSittingReset = true;
+				ModelMultiBase playerModel = PlayerModelManager.getPlayerModel(player);
+				
+				float height = playerModel.getConditionalHeight(false, false, false, null);
+				if(height < 0.01F && height > -0.01F) {
+					isMotionWaitReset = true;
+					isMotionSittingReset = true;
+				}
+				AxisAlignedBB notSit = player.getEntityBoundingBox();
+				notSit = notSit.setMaxY(notSit.minY + height);
+				if(player.world.getCollisionBoxes(player, notSit).isEmpty()) {
+					isMotionWaitReset = true;
+					isMotionSittingReset = true;
+				} else {
+					isMotionSittingReset =false;
+					isMotionWaitReset = false;
+				}
+				
 			}
 		}
 		
 		if (isMotionWaitReset) {
 			//待機モーションリセット
-			lmAvatarWaitAction.setStat(player, false);
 			avatar.setIsWaiting(false);
 			PacketHandler.instance.sendToServer(new MaidWaitingUpdatePacket(player.getEntityId(), false));
-			lmAvatarWaitCounter.setStat(player, player.ticksExisted);
+			avatar.setWaitCounter(player.ticksExisted);
 		}
 		if (isMotionSittingReset) {
 			//お座りモーションリセット
-			lmAvatarAction.setStat(player, false);
 			avatar.setIsSitting(false);
 			PacketHandler.instance.sendToServer(new MaidSittingUpdatePacket(player.getEntityId(), false));
 		}
@@ -124,16 +97,16 @@ public class LittleMaidAvatarClientTickEventHandler {
 		if (!isMotionWaitReset && !isMotionSittingReset) {
 			
 			//モーション継続状態と判断
-			Integer counter = lmAvatarWaitCounter.getStat(player);
+			Integer counter = avatar.getWaitCounter();
 			
 			//初期化
-			if (counter == 0) lmAvatarWaitCounter.setStat(player, player.ticksExisted);
+			if (counter == 0) avatar.setWaitCounter(player.ticksExisted);
 			
 			//100tickで待機状態On
 			if ((player.ticksExisted - counter) >= 100) {
-				lmAvatarWaitAction.setStat(player, true);
+				avatar.setIsWaiting(true);
+				PacketHandler.instance.sendToServer(new MaidWaitingUpdatePacket(player.getEntityId(), true));
 			}
 		}
 	}
-	
 }

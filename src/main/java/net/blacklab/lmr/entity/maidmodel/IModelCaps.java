@@ -141,11 +141,13 @@ public interface IModelCaps {
 	public static final int caps_interestedAngle	= 0x0150;
 
 	// PlayerFormLittleMaid
-	public static final int caps_ScaleFactor	= 0x0200;
-	public static final int caps_PartsVisible	= 0x0201;
-	public static final int caps_Posing			= 0x0202;
-	public static final int caps_Actors			= 0x0203;
-	public static final int caps_PartsStrings	= 0x0204;
+	public static final int caps_ScaleFactor	   = 0x0200;
+	public static final int caps_PartsVisible	   = 0x0201;
+	public static final int caps_Posing			   = 0x0202;
+	public static final int caps_Actors			   = 0x0203;
+	public static final int caps_PartsStrings	   = 0x0204;
+	public static final int caps_leftHandBlocking  = 0x0205;
+	public static final int caps_rightHandBlocking = 0x0206;
 
 	// test
 	/** モデルが変更された時に実行される関数へリンクします **/

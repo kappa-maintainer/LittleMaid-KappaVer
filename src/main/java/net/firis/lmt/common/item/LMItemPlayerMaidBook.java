@@ -9,36 +9,25 @@ import net.blacklab.lmr.entity.littlemaid.EntityLittleMaid;
 import net.firis.lmt.common.DefaultBoxSwitcher;
 import net.firis.lmt.common.capability.IMaidAvatar;
 import net.firis.lmt.common.capability.MaidAvatarProvider;
-import net.firis.lmt.handler.CommonHandler;
 import net.firis.lmt.network.ArmorModelUpdatePacket;
 import net.firis.lmt.network.AvatarSwitchPacket;
-import net.firis.lmt.network.AvatarUpdatePacket;
 import net.firis.lmt.network.MaidColorUpdatePacket;
 import net.firis.lmt.network.MainModelUpdatePacket;
 import net.firis.lmt.network.PacketHandler;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockAir;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import scala.reflect.internal.Trees.This;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -124,7 +113,6 @@ public class LMItemPlayerMaidBook extends Item {
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 		
 	}
-	
 	
 	@Override
 	@SideOnly(Side.CLIENT)

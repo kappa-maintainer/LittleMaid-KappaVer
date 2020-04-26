@@ -3,6 +3,7 @@ package net.blacklab.lmr.entity.littlemaid;
 import static net.blacklab.lmr.util.Statics.dataWatch_Flags_Aimebow;
 import static net.blacklab.lmr.util.Statics.dataWatch_Flags_Bloodsuck;
 import static net.blacklab.lmr.util.Statics.dataWatch_Flags_Freedom;
+import static net.blacklab.lmr.util.Statics.dataWatch_Flags_LockMode;
 import static net.blacklab.lmr.util.Statics.dataWatch_Flags_LooksSugar;
 import static net.blacklab.lmr.util.Statics.dataWatch_Flags_OverDrive;
 import static net.blacklab.lmr.util.Statics.dataWatch_Flags_Register;
@@ -12,7 +13,6 @@ import static net.blacklab.lmr.util.Statics.dataWatch_Flags_Working;
 import static net.blacklab.lmr.util.Statics.dataWatch_Flags_looksWithInterest;
 import static net.blacklab.lmr.util.Statics.dataWatch_Flags_looksWithInterestAXIS;
 import static net.blacklab.lmr.util.Statics.dataWatch_Flags_remainsContract;
-import static net.blacklab.lmr.util.Statics.dataWatch_Flags_LockMode;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -75,7 +75,6 @@ import net.blacklab.lmr.item.ItemTriggerRegisterKey;
 import net.blacklab.lmr.network.GuiHandler;
 import net.blacklab.lmr.network.LMRMessage;
 import net.blacklab.lmr.network.LMRNetwork;
-import net.blacklab.lmr.network.ProxyClient;
 import net.blacklab.lmr.util.Counter;
 import net.blacklab.lmr.util.EntityCaps;
 import net.blacklab.lmr.util.EnumSound;
@@ -135,7 +134,6 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.profiler.Profiler;
-import net.minecraft.server.management.PlayerList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
@@ -148,9 +146,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.EnumDifficulty;
@@ -165,7 +161,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import net.minecraftforge.items.wrapper.PlayerArmorInvWrapper;
 import net.minecraftforge.items.wrapper.PlayerInvWrapper;
@@ -3535,32 +3530,34 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 	 * @return whether the mode was changed
 	 */
 	private boolean setMaidModeAuto(EntityPlayer par1EntityPlayer) {
-		
+		if(isModeLocked) {
+			return false;
+		}
 		boolean lflag = false;
 		String orgnMode = getMaidModeString();
 
 //		setActiveModeClass(null);
 		for (int li = 0; li < maidEntityModeList.size() && !lflag; li++) {
 			lflag = maidEntityModeList.get(li).changeMode(par1EntityPlayer);
-			if (lflag && !isModeLocked) {
+			if (lflag) {
 				setActiveModeClass(maidEntityModeList.get(li));
 			}
 		}
-		if (!lflag && !isModeLocked) {
+		if (!lflag) {
 			setMaidMode(EntityMode_Basic.mmode_Escort);
 			setEquipItem(-1);
 //			maidInventory.currentItem = -1;
 		}
-		if(!isModeLocked) {
-			getNextEquipItem();
-		
-			if (!orgnMode.equals(getMaidModeString())) {
-				clearTilePosAll();
-				getNavigator().clearPath();
-				setAttackTarget(null);
-				return true;
-			}
+
+		getNextEquipItem();
+	
+		if (!orgnMode.equals(getMaidModeString())) {
+			clearTilePosAll();
+			getNavigator().clearPath();
+			setAttackTarget(null);
+			return true;
 		}
+		
 		return false;
 	}
 

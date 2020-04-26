@@ -1,13 +1,8 @@
 package net.blacklab.lmr.entity.maidmodel;
 
 import java.util.Random;
-import net.blacklab.lmr.entity.maidmodel.IModelCaps;
-import net.blacklab.lmr.entity.maidmodel.ModelCapsHelper;
-import net.blacklab.lmr.entity.maidmodel.ModelLittleMaidBase;
-import net.blacklab.lmr.entity.maidmodel.ModelRenderer;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.passive.EntityAnimal;
+
+import net.firis.lmt.command.DebugCommand;
 
 /**
  * �x�[�V�b�N���f��
@@ -160,6 +155,20 @@ public class ModelLittleMaid_Elsa5 extends ModelLittleMaidBase {
 		 mainFrame.addChild(Skirt);
 	}
 
+	public float getConditionalHeight(boolean motionSitting, boolean isSneak, boolean isWait, boolean ... others) {
+		if(motionSitting && !isSneak) {
+			return 1.375F;
+		} 
+		if(!motionSitting && isSneak) {
+			return 1.4375F;
+		}
+		if(motionSitting && isSneak) {
+			return 1.1875F;
+		}
+		return 1.65625F;
+	}
+	
+	
 	@Override
 	public float getHeight()
 	{
@@ -172,7 +181,7 @@ public class ModelLittleMaid_Elsa5 extends ModelLittleMaidBase {
 		if(motionSitting && isSneak) {
 			return 1.1875F;
 		}
-		return 1.75F;
+		return 1.65625F;
 	}
 
 	@Override
@@ -375,7 +384,14 @@ public class ModelLittleMaid_Elsa5 extends ModelLittleMaidBase {
 		{
 			bipedRightArm.rotateAngleX = bipedRightArm.rotateAngleX * 0.5F - (float)Math.PI * 0.1F * heldItemRight;
 		}
-
+		if(ModelCapsHelper.getCapsValueBoolean(pEntityCaps, caps_leftHandBlocking)) {
+			bipedRightArm.rotateAngleX -= 1.0F;
+			bipedRightArm.rotateAngleZ += 0.3F;
+		}
+		if(ModelCapsHelper.getCapsValueBoolean(pEntityCaps, caps_rightHandBlocking)) {
+			bipedRightArm.rotateAngleX -= 1.0F;
+			bipedRightArm.rotateAngleZ += 0.3F;
+		}
 		float onGroundR = 0;
 		float onGroundL = 0;
 		onGroundR = onGrounds[0];

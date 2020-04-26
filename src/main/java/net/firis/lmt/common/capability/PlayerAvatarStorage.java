@@ -1,8 +1,5 @@
 package net.firis.lmt.common.capability;
 
-import net.blacklab.lmr.LittleMaidReengaged;
-import net.minecraft.client.Minecraft;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;

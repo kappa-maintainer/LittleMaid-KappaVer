@@ -2,18 +2,12 @@ package net.firis.lmt.client.model;
 
 import org.lwjgl.opengl.GL11;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import net.blacklab.lmr.entity.maidmodel.ModelLittleMaidBase;
 import net.blacklab.lmr.entity.maidmodel.ModelMultiBase;
 import net.blacklab.lmr.util.helper.RendererHelper;
-import net.firis.lmt.common.LMTCore;
-import net.firis.lmt.common.capability.MaidAvatarProvider;
 import net.firis.lmt.common.manager.PlayerModelManager;
 import net.firis.lmt.common.modelcaps.PlayerModelCaps;
-import net.firis.lmt.config.FirisConfig;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;

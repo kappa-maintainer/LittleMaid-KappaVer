@@ -28,6 +28,7 @@ public abstract class ModelBase extends AbstractModelBase {
 
 	//カスタム設定
 	public boolean motionSitting = false;
+	
 
 
 	// ModelBase互換関数群

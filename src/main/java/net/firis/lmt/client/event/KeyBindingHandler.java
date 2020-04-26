@@ -46,7 +46,6 @@ public class KeyBindingHandler {
 		if (keyLittleMaidAvatarAction.isKeyDown()) {
 			//アクションの制御はすべてClient側で行う
 			EntityPlayer player = Minecraft.getMinecraft().player;
-			LittleMaidAvatarClientTickEventHandler.lmAvatarAction.setStat(player, true);
 			if(player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null).getIsSitting() == false)
 				player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null).setIsSitting(true);
 				PacketHandler.instance.sendToServer(new MaidSittingUpdatePacket(player.getEntityId(), true));

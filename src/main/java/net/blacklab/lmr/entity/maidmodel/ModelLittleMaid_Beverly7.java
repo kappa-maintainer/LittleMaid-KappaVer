@@ -3,16 +3,10 @@ package net.blacklab.lmr.entity.maidmodel;
 import java.util.Random;
 
 import net.blacklab.lmr.entity.littlemaid.EntityLittleMaid;
-import net.blacklab.lmr.entity.maidmodel.IModelCaps;
-import net.blacklab.lmr.entity.maidmodel.ModelCapsHelper;
-import net.blacklab.lmr.entity.maidmodel.ModelLittleMaidBase;
-import net.blacklab.lmr.entity.maidmodel.ModelRenderer;
-import net.minecraft.block.state.IBlockState;
+import net.firis.lmt.command.DebugCommand;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * ���֐߃��f��
@@ -218,6 +212,24 @@ public class ModelLittleMaid_Beverly7 extends ModelLittleMaidBase {
 		 mainFrame.addChild(upperRightLeg);
 		 mainFrame.addChild(upperLeftLeg);
 		 mainFrame.addChild(Skirt);
+	}
+	@Override
+	public float getConditionalHeight(boolean motionSitting, boolean isSneak, boolean isWait, boolean ... others) {
+		if(others == null)return 0.0F;
+		if(others.length == 0)return 0.0F;
+		if(isSneak && !isWait && !motionSitting) {
+			return 1.8125F;
+		}
+		if(motionSitting || isSneak && isWait || !others[0] && isWait) {
+			if(!isSneak) {
+				return 1.75F;
+			}
+			return 1.625F;
+		}
+		if(!others[0]) {
+			return 1.9175F;
+		}
+		return 1.99F;
 	}
 
 	@Override
@@ -606,6 +618,15 @@ public class ModelLittleMaid_Beverly7 extends ModelLittleMaidBase {
 				breastR.rotateAngleX -= f16 * f16 * 0.18F * f1 - (float)Math.sin(ticksExisted * 0.057F) * 0.05F;
 				breastL.rotateAngleX -= f16 * f16 * 0.18F * f1 - (float)Math.sin(ticksExisted * 0.057F) * 0.05F;
 				mainFrame.rotationPointY += f16 * f16 * 0.1F;
+				
+				if(ModelCapsHelper.getCapsValueBoolean(pEntityCaps, caps_leftHandBlocking)) {
+					bipedLeftArm.rotateAngleX -= 1.0F;
+					bipedLeftArm.rotateAngleZ -= 0.3F;
+				}
+				if(ModelCapsHelper.getCapsValueBoolean(pEntityCaps, caps_rightHandBlocking)) {
+					bipedRightArm.rotateAngleX -= 1.0F;
+					bipedRightArm.rotateAngleZ += 0.3F;
+				}
 			}
 		}
 
@@ -666,14 +687,14 @@ public class ModelLittleMaid_Beverly7 extends ModelLittleMaidBase {
 		{// �ҋ@��� �r
 			upperRightArm.rotateAngleX += (float)Math.sin(ticksExisted * 0.057F) * 0.05F - 0.5F;
 			upperRightArm.rotateAngleZ -= 0.3F;
-			Arms[0].rotateAngleZ -= 1.5F;
-			Arms[0].rotateAngleX -= 0.5F;
-			Arms[0].rotateAngleY += 1.5F;
+			Arms[0].rotateAngleX += 1.7F;
+			Arms[0].rotateAngleY -= 0.5F;
+			Arms[0].rotateAngleZ += 0.1F;
 			upperLeftArm.rotateAngleX += (float)Math.sin(ticksExisted * 0.057F) * 0.05F - 0.5F;
 			upperLeftArm.rotateAngleZ += 0.3F;
-			Arms[1].rotateAngleZ += 1.5F;
-			Arms[1].rotateAngleX -= 0.5F;
-			Arms[1].rotateAngleY -= 1.5F;
+			Arms[1].rotateAngleX += 1.7F;
+			Arms[1].rotateAngleY += 0.5F;
+			Arms[1].rotateAngleZ -= 0.1F;
 			breastR.rotationPointX += 0.1F;
 			breastL.rotationPointX -= 0.1F;
 		}

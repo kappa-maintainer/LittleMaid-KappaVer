@@ -10,13 +10,7 @@ public class MaidAvatar implements IMaidAvatar {
 	private boolean avatarEnabled = false;
 	private boolean isSitting = false;
 	private boolean isWaiting =false;
-	@Override
-	public void setAvatarModel(String maidModel, int maidColor, String maidArmor) {
-		this.maidModel = maidModel;
-		this.maidColor = maidColor;
-		this.maidArmor = maidArmor;
-
-	}
+	private int counter = 0;
 
 	@Override
 	public String getMainModel() {
@@ -81,6 +75,17 @@ public class MaidAvatar implements IMaidAvatar {
 	@Override
 	public boolean getIsWaiting() {
 		return isWaiting;
+	}
+
+	@Override
+	public void setWaitCounter(int counter) {
+		this.counter = counter;
+		
+	}
+
+	@Override
+	public int getWaitCounter() {
+		return counter;
 	}
 
 }

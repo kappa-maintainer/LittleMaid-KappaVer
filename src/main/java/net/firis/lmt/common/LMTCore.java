@@ -8,14 +8,10 @@ import net.blacklab.lmr.config.LMRConfig;
 import net.firis.lmt.client.event.KeyBindingHandler;
 import net.firis.lmt.client.event.LittleMaidAvatarClientTickEventHandler;
 import net.firis.lmt.client.renderer.RendererMaidPlayerMultiModel;
-import net.firis.lmt.common.capability.IMaidAvatar;
-import net.firis.lmt.common.capability.MaidAvatar;
-import net.firis.lmt.common.capability.PlayerAvatarStorage;
+import net.firis.lmt.command.DebugCommand;
 import net.firis.lmt.common.item.LMItemPlayerMaidBook;
 import net.firis.lmt.config.ConfigChangedEventHandler;
 import net.firis.lmt.config.FirisConfig;
-import net.firis.lmt.handler.CommonHandler;
-import net.firis.lmt.handler.MaidAvatarCapabilityHandler;
 import net.firis.lmt.network.PacketHandler;
 import net.firis.lmt.proxy.CommonProxy;
 import net.minecraft.client.Minecraft;
@@ -23,16 +19,15 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.item.Item;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -186,7 +181,8 @@ public class LMTCore {
 		if (!isLMTCore()) return;
 		
 		PacketHandler.registerMessages(LittleMaidReengaged.DOMAIN + "avatar");
-		
+		//Debug command
+		//ClientCommandHandler.instance.registerCommand(new DebugCommand());
 
 		//設定読込
         FirisConfig.init(event.getModConfigurationDirectory());

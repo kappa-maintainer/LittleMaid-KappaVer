@@ -4,21 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import ibxm.Player;
 import net.blacklab.lmr.entity.maidmodel.IModelCaps;
-import net.blacklab.lmr.entity.maidmodel.ModelLittleMaidBase;
 import net.blacklab.lmr.entity.maidmodel.ModelMultiBase;
 import net.blacklab.lmr.util.helper.ItemHelper;
-import net.firis.lmt.client.event.LittleMaidAvatarClientTickEventHandler;
+import net.firis.lmt.common.capability.MaidAvatarProvider;
 import net.firis.lmt.config.FirisConfig;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
@@ -91,7 +89,10 @@ public class PlayerModelCaps implements IModelCaps {
 		case caps_motionX:
 			return owner.motionX;
 		case caps_motionY:
+			if(owner instanceof EntityOtherPlayerMP)
+				return owner.posY - owner.prevPosY;
 			return owner.motionY;
+			
 		case caps_motionZ:
 			return owner.motionZ;
 		case caps_motion:
@@ -115,10 +116,11 @@ public class PlayerModelCaps implements IModelCaps {
 		case caps_isRiding:
 			if (this.isFirstPerson) return false;
 			//疑似お座りモーションを管理する
-			return owner.isRiding() || LittleMaidAvatarClientTickEventHandler.lmAvatarAction.getStat(owner);
+			return owner.isRiding() || owner.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null).getIsSitting();
 		case caps_motionSitting:
 			//疑似お座りモーション
-			return LittleMaidAvatarClientTickEventHandler.lmAvatarAction.getStat(owner);
+			//return LittleMaidAvatarClientTickEventHandler.lmAvatarAction.getStat(owner);
+			return owner.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null).getIsSitting();
 		case caps_isRidingPlayer:
 			return false;
 		case caps_isChild:
@@ -136,9 +138,8 @@ public class PlayerModelCaps implements IModelCaps {
 		case caps_isSneak:
 			if (this.isFirstPerson && !FirisConfig.cfg_immersive_avatar) {
 				return false;
-			} else {
-				return owner.isSneaking();
 			}
+			return owner.isSneaking();
 		case caps_isBurning:
 			return owner.isBurning();
 		case caps_isInWater:
@@ -234,11 +235,18 @@ public class PlayerModelCaps implements IModelCaps {
 		//メイドさん待機モーション
 		case caps_isWait:
 			if (this.isFirstPerson && !FirisConfig.cfg_immersive_avatar) return false;
-			return LittleMaidAvatarClientTickEventHandler.lmAvatarWaitAction.getStat(owner);
+			//return LittleMaidAvatarClientTickEventHandler.lmAvatarWaitAction.getStat(owner);
+			return owner.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null).getIsWaiting();
 			
 		//砂糖を持った時の首傾げ
 		case caps_isLookSuger:
 			return ItemHelper.isSugar(this.owner.getHeldItemMainhand());
+			
+		case caps_leftHandBlocking:
+			return getPlayerAction(owner, EnumHandSide.LEFT) == EnumAction.BLOCK;
+			
+		case caps_rightHandBlocking:
+			return getPlayerAction(owner, EnumHandSide.RIGHT) == EnumAction.BLOCK;
 		}
 
 		return null;
@@ -261,6 +269,8 @@ public class PlayerModelCaps implements IModelCaps {
 		caps.add(IModelCaps.caps_ticksExisted);
 		caps.add(IModelCaps.caps_dominantArm);
 		caps.add(IModelCaps.caps_motionSitting);
+		caps.add(IModelCaps.caps_leftHandBlocking);
+		caps.add(IModelCaps.caps_rightHandBlocking);
 		
 		return caps;
 	}
@@ -343,14 +353,17 @@ public class PlayerModelCaps implements IModelCaps {
 		
 		//利き手を考慮して判断する
 		ItemStack itemStack;
+		EnumHand usingHand = null;
 		if (player.getPrimaryHand() == handSide) {
 			itemStack = player.getHeldItemMainhand();
+			usingHand = EnumHand.MAIN_HAND;
 		} else {
 			itemStack = player.getHeldItemOffhand();
+			usingHand = EnumHand.OFF_HAND;
 		}
         
         //手持ちアイテムあり かつ アイテム使用中
-        if (!itemStack.isEmpty() && player.getItemInUseCount() > 0) {
+        if (!itemStack.isEmpty() && player.getItemInUseCount() > 0 && player.getActiveHand() == usingHand) {
        		return itemStack.getItemUseAction();
         }
         return EnumAction.NONE;

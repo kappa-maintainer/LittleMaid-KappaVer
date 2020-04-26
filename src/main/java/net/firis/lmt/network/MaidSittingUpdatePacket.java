@@ -1,8 +1,6 @@
 package net.firis.lmt.network;
 
 import io.netty.buffer.ByteBuf;
-import net.firis.lmt.client.event.LittleMaidAvatarClientTickEventHandler;
-import net.firis.lmt.common.DefaultBoxSwitcher;
 import net.firis.lmt.common.capability.IMaidAvatar;
 import net.firis.lmt.common.capability.MaidAvatarProvider;
 import net.minecraft.client.Minecraft;
@@ -81,9 +79,6 @@ public class MaidSittingUpdatePacket implements IMessage {
 			IMaidAvatar avatar = player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null);
 			if (avatar == null) return;
 			avatar.setIsSitting(message.isSitting);
-			if(ctx.side == Side.CLIENT) {
-				LittleMaidAvatarClientTickEventHandler.lmAvatarAction.setStat((EntityPlayer) player, message.isSitting);
-			}
 		}
 		
 	}

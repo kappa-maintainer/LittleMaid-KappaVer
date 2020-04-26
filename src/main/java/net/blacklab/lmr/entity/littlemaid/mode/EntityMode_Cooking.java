@@ -12,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.datafix.fixes.OptionsLowerCaseLanguage;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 

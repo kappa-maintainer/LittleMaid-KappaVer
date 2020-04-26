@@ -118,6 +118,20 @@ public abstract class ModelLittleMaidBase extends ModelMultiMMMBase {
 		return new float[] {0.1F, 0.5F};
 	}
 
+	public float getConditionalHeight(boolean motionSitting, boolean isSneak, boolean isWait, boolean ... others) {
+		if(motionSitting && !isSneak) {
+			return 1.10F;
+		} 
+		if(!motionSitting && isSneak) {
+			return 1.1875F;
+		}
+		if(motionSitting && isSneak) {
+			return 0.875F;
+		}
+		return 1.35F;
+	}
+	
+	
 	@Override
 	public float getHeight() {
 		if(motionSitting && !isSneak) {

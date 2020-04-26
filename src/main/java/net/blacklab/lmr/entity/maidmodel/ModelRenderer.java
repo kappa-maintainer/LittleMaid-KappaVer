@@ -10,6 +10,9 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+
 import net.blacklab.lmr.util.helper.RendererHelper;
 import net.minecraft.client.model.TextureOffset;
 import net.minecraft.client.renderer.GLAllocation;
@@ -24,9 +27,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemSkull;
 import net.minecraft.item.ItemStack;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
 
 public class ModelRenderer {
 

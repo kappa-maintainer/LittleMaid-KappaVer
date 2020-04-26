@@ -186,10 +186,16 @@ public class LMRNetwork
 		switch (pMode) {
 		case SYNC_ARMORFLAG:
 			pMaid.setMaidArmorVisible(tagCompound.getInteger("Visible"));
+			if(pMaid.isServerWorld()) {
+				pMaid.syncMaidArmorVisible();
+			}
 			break;
 
 		case SYNC_EXPBOOST:
 			pMaid.setExpBooster(tagCompound.getInteger("Booster"));
+			if(pMaid.isServerWorld()) {
+				pMaid.syncExpBoost();
+			}
 			break;
 
 		case SYNC_MODEL :
@@ -197,10 +203,14 @@ public class LMRNetwork
 
 			pMaid.setTextureNameMain(tagCompound.getString("Main"));
 			pMaid.setTextureNameArmor(tagCompound.getString("Armor"));
+			if(pMaid.isServerWorld()) {
+				pMaid.syncModelNames();
+			}
 			break;
 		default:
 			break;
 		}
+
 	}
 
 	protected static void sendIFFValue(EntityPlayer player, byte pValue, String name) {

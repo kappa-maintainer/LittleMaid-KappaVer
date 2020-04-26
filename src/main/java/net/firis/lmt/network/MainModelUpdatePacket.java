@@ -1,7 +1,6 @@
 package net.firis.lmt.network;
 
 import io.netty.buffer.ByteBuf;
-import net.firis.lmt.common.DefaultBoxSwitcher;
 import net.firis.lmt.common.capability.IMaidAvatar;
 import net.firis.lmt.common.capability.MaidAvatarProvider;
 import net.minecraft.client.Minecraft;

@@ -1,7 +1,6 @@
 package net.firis.lmt.network;
 
 import io.netty.buffer.ByteBuf;
-import net.firis.lmt.client.event.LittleMaidAvatarClientTickEventHandler;
 import net.firis.lmt.common.capability.IMaidAvatar;
 import net.firis.lmt.common.capability.MaidAvatarProvider;
 import net.minecraft.client.Minecraft;
@@ -80,9 +79,6 @@ public class MaidWaitingUpdatePacket implements IMessage {
 			IMaidAvatar avatar = player.getCapability(MaidAvatarProvider.MAID_AVATAR_CAPABILITY, null);
 			if (avatar == null) return;
 			avatar.setIsWaiting(message.isWaiting);
-			if(ctx.side == Side.CLIENT) {
-				LittleMaidAvatarClientTickEventHandler.lmAvatarWaitAction.setStat((EntityPlayer) player, message.isWaiting);
-			}
 		}
 		
 	}

@@ -1,6 +1,5 @@
 package net.firis.lmt.proxy;
 
-import net.blacklab.lmr.config.LMRConfig;
 import net.firis.lmt.common.LMTCore;
 import net.firis.lmt.common.capability.IMaidAvatar;
 import net.firis.lmt.common.capability.MaidAvatar;

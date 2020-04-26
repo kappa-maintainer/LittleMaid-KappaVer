@@ -231,6 +231,7 @@ public abstract class ModelMultiBase extends ModelBase implements IModelCaps {
 		//お座りモーション判定
 		case caps_motionSitting:
 			return motionSitting;
+			
 		}
 		return null;
 	}
@@ -288,12 +289,24 @@ public abstract class ModelMultiBase extends ModelBase implements IModelCaps {
 		case caps_motionSitting:
 			motionSitting = (Boolean)pArg[0];
 			return true;
+
 		}
 		
 		return false;
 	}
-
-	
+	/**
+	 * Use for getting model height in
+	 * certain conditions without really
+	 * change them.
+	 * @param motionSitting
+	 * @param isSneak
+	 * @param isWait
+	 * @param others
+	 * @return height
+	 */
+	public float getConditionalHeight(boolean motionSitting, boolean isSneak, boolean isWait, boolean ... others) {
+		return 0.0F;
+	}
 	
 	public static final float mh_sqrt_float(float f) {
 		return MathHelper.sqrt(f);
