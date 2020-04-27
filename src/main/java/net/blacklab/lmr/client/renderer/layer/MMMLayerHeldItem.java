@@ -44,7 +44,7 @@ public class MMMLayerHeldItem extends LayerHeldItem {
 			int i = 0, handindexes[] = {lmm.getDominantArm(), lmm.getDominantArm() == 1 ? 0 : 1};
 
 			while (heldItemIterator.hasNext()) {
-				ItemStack itemstack = (ItemStack) heldItemIterator.next();
+				ItemStack itemstack = heldItemIterator.next();
 
 				if (!itemstack.isEmpty())
 				{

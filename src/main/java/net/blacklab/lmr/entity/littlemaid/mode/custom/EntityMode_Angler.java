@@ -376,7 +376,7 @@ public class EntityMode_Angler extends EntityModeBase {
 		IBlockState state = owner.world.getBlockState(pos);
 		Material material = state.getMaterial();
 		if (material == Material.WATER 
-				&& ((Integer)state.getValue(BlockLiquid.LEVEL)).intValue() == 0) {
+				&& state.getValue(BlockLiquid.LEVEL).intValue() == 0) {
 			return true;
 		}
 		return false;

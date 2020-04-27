@@ -28,7 +28,7 @@ public class PathNavigatorLittleMaid extends PathNavigateGround {
 	@Override
 	protected Vec3d getEntityPosition() {
 		if (theMaid.isInWater())
-			return new Vec3d(entity.posX, entity.posY + (double)entity.height * 0.5D, entity.posZ);
+			return new Vec3d(entity.posX, entity.posY + entity.height * 0.5D, entity.posZ);
 		return super.getEntityPosition();
 	}
 
@@ -39,7 +39,7 @@ public class PathNavigatorLittleMaid extends PathNavigateGround {
 			float f = entity.width * entity.width;
 			int i = 6;
 
-			if (vec3.squareDistanceTo(currentPath.getVectorFromIndex(entity, currentPath.getCurrentPathIndex())) < (double)f) {
+			if (vec3.squareDistanceTo(currentPath.getVectorFromIndex(entity, currentPath.getCurrentPathIndex())) < f) {
 				currentPath.incrementPathIndex();
 			}
 
@@ -62,7 +62,7 @@ public class PathNavigatorLittleMaid extends PathNavigateGround {
 	protected boolean isDirectPathBetweenPoints(Vec3d posVec31, Vec3d posVec32,
 			int sizeX, int sizeY, int sizeZ) {
 		if (theMaid.isInWater()) {
-			RayTraceResult movingobjectposition = this.world.rayTraceBlocks(posVec31, new Vec3d(posVec32.x, posVec32.y + (double)entity.height * 0.5D, posVec32.z), false, true, false);
+			RayTraceResult movingobjectposition = this.world.rayTraceBlocks(posVec31, new Vec3d(posVec32.x, posVec32.y + entity.height * 0.5D, posVec32.z), false, true, false);
 			return movingobjectposition == null || movingobjectposition.typeOfHit == RayTraceResult.Type.MISS;
 		}
 		return super.isDirectPathBetweenPoints(posVec31, posVec32, sizeX, sizeY, sizeZ);

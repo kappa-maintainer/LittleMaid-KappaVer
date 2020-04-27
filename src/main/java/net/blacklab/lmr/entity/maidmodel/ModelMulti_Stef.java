@@ -105,6 +105,7 @@ public class ModelMulti_Stef extends ModelMulti_Steve {
 		return "Crafter";
 	}
 
+	@Override
 	public void setDefaultPause(float par1, float par2, float pTicksExisted,
 			float pHeadYaw, float pHeadPitch, float par6, IModelCaps pEntityCaps) {
 		// 初期姿勢

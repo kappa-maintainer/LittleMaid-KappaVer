@@ -2,8 +2,6 @@ package net.blacklab.lmr.entity.maidmodel;
 
 import java.util.Random;
 
-import net.firis.lmt.command.DebugCommand;
-
 /**
  * �x�[�V�b�N���f��
  * �g��1.75�u���b�N��
@@ -155,6 +153,7 @@ public class ModelLittleMaid_Elsa5 extends ModelLittleMaidBase {
 		 mainFrame.addChild(Skirt);
 	}
 
+	@Override
 	public float getConditionalHeight(boolean motionSitting, boolean isSneak, boolean isWait, boolean ... others) {
 		if(motionSitting && !isSneak) {
 			return 1.375F;
@@ -284,8 +283,8 @@ public class ModelLittleMaid_Elsa5 extends ModelLittleMaidBase {
 
 		// �܂΂��� from SR2
 		float blinkFreq = 0.16F; //�܂΂����p�x, min: 0
-		blinkFreq += 1F - (float)ModelCapsHelper.getCapsValueInt(pEntityCaps, caps_health) / 20F; //�̗͏��Ȃ��Ƃ܂΂��������Ȃ�
-		float f3 = (float)(entityTicksExisted + pRenderPartialTicks + entityIdFactor) * 0.01F; //�ʑ�
+		blinkFreq += 1F - ModelCapsHelper.getCapsValueInt(pEntityCaps, caps_health) / 20F; //�̗͏��Ȃ��Ƃ܂΂��������Ȃ�
+		float f3 = (entityTicksExisted + pRenderPartialTicks + entityIdFactor) * 0.01F; //�ʑ�
 		float f4 = (float)(Math.sin(f3 * 3F) + Math.sin(f3 * 17F) + Math.sin(f3 * 37F) + blinkFreq-2.23309F); //�p���X��
 		if (f4 < 0) {//�J
 			eyeR.setVisible(true);
@@ -415,7 +414,7 @@ public class ModelLittleMaid_Elsa5 extends ModelLittleMaidBase {
 				f6 = 1.0F - f6;
 				f7 = (float)Math.sin(f6 * (float)Math.PI);
 				f8 = (float)Math.sin(onGroundR * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
-				bipedRightArm.rotateAngleX -= (double)f7 * 1.2D + (double)f8;
+				bipedRightArm.rotateAngleX -= f7 * 1.2D + f8;
 				bipedRightArm.rotateAngleY += bipedBody.rotateAngleY * 2.0F;
 				bipedRightArm.rotateAngleZ = (float)Math.sin(onGroundR * 3.141593F) * -0.4F;
 			}
@@ -432,7 +431,7 @@ public class ModelLittleMaid_Elsa5 extends ModelLittleMaidBase {
 				f6 = 1.0F - f6;
 				f7 = (float)Math.sin(f6 * (float)Math.PI);
 				f8 = (float)Math.sin(onGroundL * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
-				bipedLeftArm.rotateAngleX -= (double)f7 * 1.2D + (double)f8;
+				bipedLeftArm.rotateAngleX -= f7 * 1.2D + f8;
 				bipedLeftArm.rotateAngleY += bipedBody.rotateAngleY * 2.0F;
 				bipedLeftArm.rotateAngleZ = (float)Math.sin(onGroundL * 3.141593F) * 0.4F;
 			}

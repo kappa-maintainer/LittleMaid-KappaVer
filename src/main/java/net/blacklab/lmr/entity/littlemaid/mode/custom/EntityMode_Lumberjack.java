@@ -270,7 +270,7 @@ public class EntityMode_Lumberjack extends EntityModeBase {
 				curStack.damageItem(this.fellingBlockPosList.size(), owner.maidAvatar);
 				
 				owner.playLittleMaidVoiceSound(EnumSound.farmer_harvest, true);
-				owner.addMaidExperience(0.5f * (float)this.fellingBlockPosList.size());
+				owner.addMaidExperience(0.5f * this.fellingBlockPosList.size());
 				
 				//関連パラメータをリセット
 				this.isFelling = false;

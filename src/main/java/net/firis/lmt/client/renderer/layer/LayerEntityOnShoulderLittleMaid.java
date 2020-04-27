@@ -15,7 +15,7 @@ public class LayerEntityOnShoulderLittleMaid extends LayerEntityOnShoulder {
 		
 		super(manager);
 		
-		this.renderer = (RendererMaidPlayerMultiModel) renderer;
+		this.renderer = renderer;
 	}
 	
 	@Override

@@ -6,6 +6,7 @@ import net.blacklab.lib.vevent.SubscribeVEvent;
 import net.blacklab.lmr.LittleMaidReengaged;
 import net.blacklab.lmr.api.event.EventLMRE;
 import net.blacklab.lmr.client.entity.EntityLittleMaidAvatarSP;
+import net.blacklab.lmr.config.LMRConfig;
 import net.blacklab.lmr.entity.littlemaid.EntityLittleMaid;
 import net.blacklab.lmr.entity.littlemaid.EntityLittleMaidAvatarMP;
 import net.blacklab.lmr.entity.littlemaid.IEntityLittleMaidAvatar;
@@ -98,9 +99,25 @@ public class EventHookLMRE
 
 	@SubscribeEvent
 	public void onLivingHurt(LivingHurtEvent event) {
-		Entity entity = event.getSource().getTrueSource();
+		Entity entity = event.getSource().getImmediateSource();
 		if (entity instanceof EntityArrow && ((EntityArrow) entity).shootingEntity instanceof EntityLittleMaid) {
 			((EntityLittleMaid)((EntityArrow) entity).shootingEntity).addMaidExperience(0.18f * event.getAmount());
+		}
+		if(LMRConfig.cfg_prevent_friendly_fire) {
+			Entity sourcEntity = event.getSource().getTrueSource();
+			if(sourcEntity instanceof EntityLittleMaid) {
+				Entity damagEntity = event.getEntity();
+				if(damagEntity instanceof EntityLittleMaid) {
+					event.setCanceled(true);
+				} else if(damagEntity instanceof EntityPlayer){
+					if(LMRConfig.cfg_cstm_everyones_maid) {
+						event.setCanceled(true);
+					} else if(((EntityLittleMaid)sourcEntity).getMaidMasterEntity().isEntityEqual(damagEntity)) {
+						event.setCanceled(true);
+					}
+				}
+					
+			}
 		}
 	}
 
@@ -119,7 +136,7 @@ public class EventHookLMRE
 	public static boolean deleteDoppelganger(boolean loading, World worldObj, Entity entity) {
 		// ドッペル対策
 		for (int i = 0; i < worldObj.loadedEntityList.size(); i++) {
-			Entity entity1 = (Entity)worldObj.loadedEntityList.get(i);
+			Entity entity1 = worldObj.loadedEntityList.get(i);
 				if (!entity1.isDead && entity1 instanceof EntityLivingBase) {
 				EntityLivingBase elm = (EntityLivingBase)entity1;
 				if (elm.equals(entity)) continue;

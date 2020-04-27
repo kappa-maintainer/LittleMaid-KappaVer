@@ -147,7 +147,7 @@ public class CommonHelper {
 			double ltdistance = pRange * pRange;
 
 			for (int var13 = 0; var13 < llist.size(); ++var13) {
-				Entity lentity = (Entity)llist.get(var13);
+				Entity lentity = llist.get(var13);
 
 				if (lentity.canBeCollidedWith()) {
 					float lexpand = lentity.getCollisionBorderSize() + 0.3F;

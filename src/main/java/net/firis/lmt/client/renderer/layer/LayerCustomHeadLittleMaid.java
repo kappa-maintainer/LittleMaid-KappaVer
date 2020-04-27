@@ -28,7 +28,8 @@ public class LayerCustomHeadLittleMaid extends LayerCustomHead
         this.renderer = renderer;
     }
 
-    public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+    @Override
+	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
     	EntityPlayer player = (EntityPlayer) entitylivingbaseIn;
 		

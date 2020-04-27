@@ -57,7 +57,7 @@ public class MMMLayerArmor extends LayerArmorBase<ModelBaseDuo> {
 
 	@Override
 	protected void setModelSlotVisible(ModelBaseDuo paramModelBase, EntityEquipmentSlot paramInt) {
-		ModelBaseDuo model = (ModelBaseDuo) paramModelBase;
+		ModelBaseDuo model = paramModelBase;
 		model.showArmorParts(paramInt.getIndex());
 	}
 

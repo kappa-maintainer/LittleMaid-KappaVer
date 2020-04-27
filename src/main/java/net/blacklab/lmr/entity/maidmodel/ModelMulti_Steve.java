@@ -285,6 +285,7 @@ public class ModelMulti_Steve extends ModelMultiBase {
 		return new float[] {0.5F, 1.0F};
 	}
 
+	@Override
 	public float getConditionalHeight(boolean motionSitting, boolean isSneak, boolean isWait, boolean ... others) {
 		if(isSneak)return 1.65F;
 		return 1.8F;

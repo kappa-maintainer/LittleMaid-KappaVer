@@ -38,7 +38,7 @@ public class MaidMoveNodeProcessor extends WalkNodeProcessor {
 	@Override
 	public PathPoint getPathPointToCoords(double x, double y, double z) {
 		if (canSwim && entity.isInWater()) {
-			return this.openPoint(MathHelper.floor(x - (double)(entity.width / 2.0F)), MathHelper.floor(y + 0.5D), MathHelper.floor(z - (double)(entity.width / 2.0F)));
+			return this.openPoint(MathHelper.floor(x - entity.width / 2.0F), MathHelper.floor(y + 0.5D), MathHelper.floor(z - entity.width / 2.0F));
 		}
 		return super.getPathPointToCoords(x, y, z);
 	}

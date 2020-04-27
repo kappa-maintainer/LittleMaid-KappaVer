@@ -32,6 +32,7 @@ public class EntityAILMFollowOwner extends EntityAIBase implements IEntityAILM {
 	/**
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
+	@Override
 	public boolean shouldExecute() {
 		if (!isEnable)
 			return false;
@@ -50,6 +51,7 @@ public class EntityAILMFollowOwner extends EntityAIBase implements IEntityAILM {
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
+	@Override
 	public void startExecuting() {
 		theOwner = theMaid.getMaidMasterEntity();
 		field_48310_h = 0;
@@ -61,6 +63,7 @@ public class EntityAILMFollowOwner extends EntityAIBase implements IEntityAILM {
 	/**
 	 * Resets the task
 	 */
+	@Override
 	public void resetTask() {
 		theMaid.setSprinting(false);
 		theOwner = null;
@@ -72,6 +75,7 @@ public class EntityAILMFollowOwner extends EntityAIBase implements IEntityAILM {
 	/**
 	 * Updates the task
 	 */
+	@Override
 	public void updateTask() {
 		double toDistance = theMaid.getDistanceSq(theOwner);
 		

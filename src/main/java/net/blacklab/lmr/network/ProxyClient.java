@@ -39,6 +39,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
  */
 public class ProxyClient extends ProxyCommon
 {
+	@Override
 	public void rendererRegister() {
 		
 		ModelLoader.setCustomModelResourceLocation(
@@ -81,6 +82,7 @@ public class ProxyClient extends ProxyCommon
 
 // Avatarr
 
+	@Override
 	public void onItemPickup(EntityPlayer pAvatar, Entity entity, int i) {
 		// アイテム回収のエフェクト
 		// TODO:こっちを使うか？
@@ -89,11 +91,13 @@ public class ProxyClient extends ProxyCommon
 	}
 
 	// TODO いらん？
+	@Override
 	public void onCriticalHit(EntityPlayer pAvatar, Entity par1Entity) {
 		//1.8後回し
 //		MMM_Helper.mc.effectRenderer.addEffect(new EntityCrit2FX(MMM_Helper.mc.theWorld, par1Entity));
 	}
 
+	@Override
 	public void onEnchantmentCritical(EntityPlayer pAvatar, Entity par1Entity) {
 		//1.8後回し
 //		EntityCrit2FX entitycrit2fx = new EntityCrit2FX(MMM_Helper.mc.theWorld, par1Entity, "magicCrit");
@@ -101,6 +105,7 @@ public class ProxyClient extends ProxyCommon
 	}
 
 
+	@Override
 	public EntityPlayer getClientPlayer()
 	{
 		return Minecraft.getMinecraft().player;
@@ -113,6 +118,7 @@ public class ProxyClient extends ProxyCommon
 	}
 	*/
 
+	@Override
 	public void loadSounds()
 	{
 		// 音声の解析
@@ -122,6 +128,7 @@ public class ProxyClient extends ProxyCommon
 //		SoundLoader.load();
 	}
 
+	@Override
 	public boolean isSinglePlayer()
 	{
 		return Minecraft.getMinecraft().isSingleplayer();

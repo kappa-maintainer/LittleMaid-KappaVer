@@ -74,7 +74,7 @@ public class EntityAILMNearestAttackableTarget<T extends EntityLivingBase> exten
 		Collections.sort(llist, theNearestAttackableTargetSorter);
 		Iterator<T> nearEntityCollectionsIterator = llist.iterator();
 		while (nearEntityCollectionsIterator.hasNext()) {
-			T lentity = (T)nearEntityCollectionsIterator.next();
+			T lentity = nearEntityCollectionsIterator.next();
 			if (lentity == theMaid.getAttackTarget()) {
 				return true;
 			}
@@ -90,7 +90,7 @@ public class EntityAILMNearestAttackableTarget<T extends EntityLivingBase> exten
 	@Override
 	public void startExecuting() {
 		super.startExecuting();
-		theMaid.setAttackTarget((EntityLivingBase)targetEntity);
+		theMaid.setAttackTarget(targetEntity);
 
 		fcanAttack = 0;
 		fretryCounter = 0;

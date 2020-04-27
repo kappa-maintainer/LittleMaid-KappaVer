@@ -53,6 +53,7 @@ public class PlayerModelCaps implements IModelCaps {
 		return false;
 	}
 	
+	@Override
 	@SuppressWarnings("deprecation")
 	public Object getCapsValue(int pIndex, Object... pArg) {
 		switch (pIndex) {

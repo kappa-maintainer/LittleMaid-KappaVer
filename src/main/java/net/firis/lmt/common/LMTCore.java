@@ -182,8 +182,9 @@ public class LMTCore {
 		
 		PacketHandler.registerMessages(LittleMaidReengaged.DOMAIN + "avatar");
 		//Debug command
-		//ClientCommandHandler.instance.registerCommand(new DebugCommand());
-
+		if(LMRConfig.cfg_developer_test_module) {
+			ClientCommandHandler.instance.registerCommand(new DebugCommand());
+		}
 		//設定読込
         FirisConfig.init(event.getModConfigurationDirectory());
         

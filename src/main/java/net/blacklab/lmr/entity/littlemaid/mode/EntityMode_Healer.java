@@ -184,7 +184,7 @@ public class EntityMode_Healer extends EntityModeBase {
 							if (list != null) {
 								PotionEffect potioneffect;
 								for(Iterator<PotionEffect> iterator = list.iterator(); iterator.hasNext();) {
-									potioneffect = (PotionEffect)iterator.next();
+									potioneffect = iterator.next();
 									if (potioneffect.getPotion().equals(Potion.getPotionFromResourceLocation("instant_health"))) {
 										if ((6 << potioneffect.getAmplifier()) <= (lmaster.getMaxHealth() - lmaster.getHealth())) {
 //	                                    	mod_littleMaidMob.Debug(String.format("%d <= %d", (6 << potioneffect.getAmplifier()), (masterEntity.func_40117_c() - masterEntity.health)));

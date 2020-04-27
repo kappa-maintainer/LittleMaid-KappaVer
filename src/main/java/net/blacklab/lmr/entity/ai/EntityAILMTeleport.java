@@ -89,9 +89,9 @@ public class EntityAILMTeleport extends EntityAIBase implements IEntityAILM {
 			if (posList.size() > 0) {
 				BlockPos tDest = posList.get(new Random().nextInt(posList.size()));
 				theMaid.setPosition(
-						(double)(tDest.getX()) + 0.5D, 
+						(tDest.getX()) + 0.5D, 
 						tDest.getY(), 
-						((double)tDest.getZ()) + 0.5D);
+						(tDest.getZ()) + 0.5D);
 				
 				resetTask();
 			}

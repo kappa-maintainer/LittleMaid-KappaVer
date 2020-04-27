@@ -108,6 +108,8 @@ public class LMRConfig {
 	public static boolean cfg_is_arrows_pickable = false;
 	
 	public static boolean cfg_can_lock_modes = true;
+	
+	public static boolean cfg_prevent_friendly_fire = true;
 	/** ファイルローダー機能のキャッシュ機能のON/OFF設定 */
 	public static boolean cfg_loader_is_cache = true;
 	
@@ -169,6 +171,9 @@ public class LMRConfig {
 		
 		cfg_can_lock_modes = cfg.getBoolean("canLockMaidMode", "General", true, 
 				"If 'true', maid's inventory GUI will have a button to lock maid's mode.");
+		
+		cfg_prevent_friendly_fire = cfg.getBoolean("preventFriendlyFire", "General", true, 
+				"If 'true', maids can't damage each other");
 		
 		//指定IDを砂糖として認識する
 		String[] sugarItemIds = new String[] {"minecraft:sugar"};

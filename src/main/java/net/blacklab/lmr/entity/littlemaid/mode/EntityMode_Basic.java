@@ -225,7 +225,7 @@ public class EntityMode_Basic extends EntityModeBlockBase {
 		// 世界のメイドから
 		if (checkWorldMaid(ltile)) return false;
 		// 使用済みチェック
-		if (fusedTiles.contains((IInventory)ltile)) {
+		if (fusedTiles.contains(ltile)) {
 			// 既に通り過ぎた場所よッ！
 			return false;
 		}
@@ -244,7 +244,7 @@ public class EntityMode_Basic extends EntityModeBlockBase {
 		List<TileEntity> list = owner.getEntityWorld().loadedTileEntityList;
 		for (TileEntity lentity : list) {
 			if(!(lentity instanceof TileEntityChest)) continue;
-			if (!fusedTiles.contains((IInventory)lentity)) {
+			if (!fusedTiles.contains(lentity)) {
 				if (((IInventory)lentity).getSizeInventory() < 18) {
 					// インベントリが一定サイズ以下はスキップ
 					continue;

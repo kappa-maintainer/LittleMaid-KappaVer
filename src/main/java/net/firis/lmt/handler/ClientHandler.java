@@ -36,8 +36,8 @@ public class ClientHandler {
 	    if(!player.isSneaking() && !player.world.getCollisionBoxes(player, notSneak).isEmpty() && event.getMovementInput().sneak == false)
 	    {
 	      event.getMovementInput().sneak = true;
-	      event.getMovementInput().moveStrafe = (float)((double)event.getMovementInput().moveStrafe * 0.3D);
-	      event.getMovementInput().moveForward = (float)((double)event.getMovementInput().moveForward * 0.3D);
+	      event.getMovementInput().moveStrafe = (float)(event.getMovementInput().moveStrafe * 0.3D);
+	      event.getMovementInput().moveForward = (float)(event.getMovementInput().moveForward * 0.3D);
 	    }
 
 

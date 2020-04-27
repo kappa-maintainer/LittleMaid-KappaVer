@@ -97,7 +97,7 @@ public class ResourceFileHelper {
 			
 			//Jsonへパース
 			Gson gson = new Gson();
-			jsonObject = (T) gson.fromJson(json, clazz);
+			jsonObject = gson.fromJson(json, clazz);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

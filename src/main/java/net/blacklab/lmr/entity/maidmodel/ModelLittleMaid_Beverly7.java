@@ -3,7 +3,6 @@ package net.blacklab.lmr.entity.maidmodel;
 import java.util.Random;
 
 import net.blacklab.lmr.entity.littlemaid.EntityLittleMaid;
-import net.firis.lmt.command.DebugCommand;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
@@ -402,7 +401,7 @@ public class ModelLittleMaid_Beverly7 extends ModelLittleMaidBase {
 
 		// �܂΂��� from SR2
 		float blinkFreq = 0.20F; //�܂΂����p�x, min: 0
-		blinkFreq += 1F - (float)ModelCapsHelper.getCapsValueInt(pEntityCaps, caps_health) / 20F; //�̗͏��Ȃ��Ƃ܂΂��������Ȃ�
+		blinkFreq += 1F - ModelCapsHelper.getCapsValueInt(pEntityCaps, caps_health) / 20F; //�̗͏��Ȃ��Ƃ܂΂��������Ȃ�
 		float idTicks = entityTicksExisted + pRenderPartialTicks + entityIdFactor;
 		float f3 = idTicks * 0.01F; //�ʑ�
 		float f4 = (float)(Math.sin(f3 * 3F) + Math.sin(f3 * 17F) + Math.sin(f3 * 37F) + blinkFreq-2.23309F); //�p���X��
@@ -659,7 +658,7 @@ public class ModelLittleMaid_Beverly7 extends ModelLittleMaidBase {
 				f6 = 1.0F - onGroundR;
 				f7 = (float)Math.sin((1.0F - f6 * f6 * f6 * f6) * (float)Math.PI);
 				f8 = (float)Math.sin(onGroundR * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
-				upperRightArm.rotateAngleX -= (double)f7 * 1.2D + (double)f8;
+				upperRightArm.rotateAngleX -= f7 * 1.2D + f8;
 				upperRightArm.rotateAngleY += bipedBody.rotateAngleY * 2.0F;
 				upperRightArm.rotateAngleZ += (float)Math.sin(onGroundR * 3.141593F) * -0.4F;
 			}
@@ -673,7 +672,7 @@ public class ModelLittleMaid_Beverly7 extends ModelLittleMaidBase {
 				f6 = 1.0F - onGroundR;
 				f7 = (float)Math.sin((1.0F - f6 * f6 * f6 * f6) * (float)Math.PI);
 				f8 = (float)Math.sin(onGroundL * (float)Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
-				upperLeftArm.rotateAngleX -= (double)f7 * 1.2D + (double)f8;
+				upperLeftArm.rotateAngleX -= f7 * 1.2D + f8;
 				upperLeftArm.rotateAngleY += bipedBody.rotateAngleY * 2.0F;
 				upperLeftArm.rotateAngleZ += (float)Math.sin(onGroundL * 3.141593F) * 0.4F;
 			}

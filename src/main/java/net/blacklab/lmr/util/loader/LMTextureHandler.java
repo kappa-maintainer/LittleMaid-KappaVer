@@ -63,7 +63,7 @@ public class LMTextureHandler implements ILMFileLoaderHandler {
 		if (!LMRConfig.cfg_loader_is_cache) return;
 		
 		//キャッシュファイルの読み込み
-		textureMap = (Map<String, List<String>>) ResourceFileHelper.readFromJson(this.cacheFileName, Map.class);
+		textureMap = ResourceFileHelper.readFromJson(this.cacheFileName, Map.class);
 		
 		if (textureMap != null) {
 			this.isCache = true;

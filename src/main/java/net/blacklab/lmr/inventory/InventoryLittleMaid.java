@@ -160,6 +160,7 @@ public class InventoryLittleMaid extends InventoryPlayer {
 		entityLittleMaid.onGuiClosed();
 	}
 
+	@Override
 	public void decrementAnimations() {
 		for (int li = 0; li < getSizeInventory(); ++li) {
 			if (!getStackInSlot(li).isEmpty()) {
@@ -196,6 +197,7 @@ public class InventoryLittleMaid extends InventoryPlayer {
 */
 
 	// From InventoryPlayer
+	@Override
 	public void damageArmor(float pDamage) {
 		pDamage = Math.max(pDamage/4, 1);
 
@@ -271,6 +273,7 @@ public class InventoryLittleMaid extends InventoryPlayer {
 		}
 	}
 
+	@Override
 	public void dropAllItems() {
 		dropAllItems(false);
 	}
@@ -283,6 +286,7 @@ public class InventoryLittleMaid extends InventoryPlayer {
 		return player.getDistanceSq(entityLittleMaid) <= 64D;
 	}
 
+	@Override
 	public ItemStack getCurrentItem() {
 		
 		int currentItem = this.getCurrentItemIndex();
@@ -471,7 +475,7 @@ public class InventoryLittleMaid extends InventoryPlayer {
 					PotionEffect potioneffect;
 					for (Iterator<PotionEffect> iterator = list.iterator(); iterator
 							.hasNext();) {
-						potioneffect = (PotionEffect) iterator.next();
+						potioneffect = iterator.next();
 						if (Potion.getIdFromPotion(potioneffect.getPotion()) == potionID) break;
 						if (Potion.getIdFromPotion(potioneffect.getPotion()) == 6) {
 							if ((!flag && isUndead) || (flag && !isUndead)) {
@@ -492,6 +496,7 @@ public class InventoryLittleMaid extends InventoryPlayer {
 		return -1;
 	}
 
+	@Override
 	public int getFirstEmptyStack() {
 		for (int i = 0; i < InventoryLittleMaid.maxInventorySize; i++) {
 			if (mainInventory.get(i).isEmpty()) {

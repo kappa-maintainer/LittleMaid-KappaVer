@@ -89,7 +89,6 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 		dataManager = avatar.getDataManager();
 
 //		this.dataManager.register(Statics.dataWatch_AbsorptionAmount, Float.valueOf(0.0F));
-
 		/*
 		 * TODO 要調整
 		 */
@@ -117,10 +116,12 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 		super.entityInit();
 
 	}
+	@Override
 	public void readEntityFromNBT(NBTTagCompound var1)
 	{
 		super.readEntityFromNBT(var1);
 	}
+	@Override
 	public void writeEntityToNBT(NBTTagCompound var1)
 	{
 		super.writeEntityToNBT(var1);
@@ -132,6 +133,7 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 		return avatar.getHeldItem(pHand);
 	}
 
+	@Override
 	public World getEntityWorld(){ return super.getEntityWorld(); }
 	////////////////////////////////////////////////////////////////////////////////////
 
@@ -326,6 +328,7 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 		return EnumHand.MAIN_HAND;
 	}
 
+	@Override
 	public boolean isUsingItemLittleMaid() {
 		return isHandActive() || getIsItemTrigger();
 	}
@@ -444,10 +447,12 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 		return 0;
 	}
 
+	@Override
 	public void setAbsorptionAmount(float par1) {
 		avatar.setAbsorptionAmount(par1);
 	}
 
+	@Override
 	public float getAbsorptionAmount() {
 		return avatar.getAbsorptionAmount();
 	}
@@ -455,6 +460,7 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 	/**
 	 * 属性値リストを取得
 	 */
+	@Override
 	public AbstractAttributeMap getAttributeMap() {
 //		return super.func_110140_aT();
 		return avatar == null ? super.getAttributeMap() : avatar.getAttributeMap();
@@ -487,6 +493,7 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 		if (avatar != null) avatar.onChangedPotionEffect(par1PotionEffect, par2);
 	}
 
+	@Override
 	public void getValue() {
 		// EntityLittleMaidから値をコピー
 		setPosition(avatar.posX, avatar.posY, avatar.posZ);
@@ -534,6 +541,7 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 	/**
 	 * 射撃管制用、rotationを頭に合わせる
 	 */
+	@Override
 	public void getValueVectorFire(double atx, double aty, double atz, double atl) {
 		// EntityLittleMaidから値をコピー
 		double l = MathHelper.sqrt(atl);
@@ -599,6 +607,7 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 
 	}
 
+	@Override
 	public void setValueVector() {
 		// EntityLittleMiadへ値をコピー
 		avatar.posX = posX - appendX;
@@ -619,20 +628,24 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 		if (isSwingInProgress) avatar.setSwinging(EnumSound.Null, false);
 	}
 
+	@Override
 	public void W_damageArmor(float par1){
 		super.damageArmor(par1);
 	}
 
+	@Override
 	public float applyArmorCalculations(DamageSource par1DamageSource, float par2)
 	{
 		return super.applyArmorCalculations(par1DamageSource, par2);
 	}
 
+	@Override
 	public float applyPotionDamageCalculations(DamageSource par1DamageSource, float par2)
 	{
 		return super.applyPotionDamageCalculations(par1DamageSource, par2);
 	}
 
+	@Override
 	public void W_damageEntity(DamageSource par1DamageSource, float par2)
 	{
 		super.damageEntity(par1DamageSource, par2);
@@ -820,9 +833,9 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 
                     f = f + f1;
                     boolean flag3 = false;
-                    double d0 = (double)(this.distanceWalkedModified - this.prevDistanceWalkedModified);
+                    double d0 = this.distanceWalkedModified - this.prevDistanceWalkedModified;
 
-                    if (flag && !flag2 && !flag1 && this.onGround && d0 < (double)this.getAIMoveSpeed())
+                    if (flag && !flag2 && !flag1 && this.onGround && d0 < this.getAIMoveSpeed())
                     {
                         ItemStack itemstack = this.getHeldItem(EnumHand.MAIN_HAND);
 
@@ -858,11 +871,11 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
                         {
                             if (targetEntity instanceof EntityLivingBase)
                             {
-                                ((EntityLivingBase)targetEntity).knockBack(this, (float)i * 0.5F, (double)MathHelper.sin(this.rotationYaw * 0.017453292F), (double)(-MathHelper.cos(this.rotationYaw * 0.017453292F)));
+                                ((EntityLivingBase)targetEntity).knockBack(this, i * 0.5F, MathHelper.sin(this.rotationYaw * 0.017453292F), (-MathHelper.cos(this.rotationYaw * 0.017453292F)));
                             }
                             else
                             {
-                                targetEntity.addVelocity((double)(-MathHelper.sin(this.rotationYaw * 0.017453292F) * (float)i * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * 0.017453292F) * (float)i * 0.5F));
+                                targetEntity.addVelocity(-MathHelper.sin(this.rotationYaw * 0.017453292F) * i * 0.5F, 0.1D, MathHelper.cos(this.rotationYaw * 0.017453292F) * i * 0.5F);
                             }
 
                             this.motionX *= 0.6D;
@@ -878,7 +891,7 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
                             {
                                 if (entitylivingbase != this && entitylivingbase != targetEntity && !this.isOnSameTeam(entitylivingbase) && this.getDistanceSq(entitylivingbase) < 9.0D)
                                 {
-                                    entitylivingbase.knockBack(this, 0.4F, (double)MathHelper.sin(this.rotationYaw * 0.017453292F), (double)(-MathHelper.cos(this.rotationYaw * 0.017453292F)));
+                                    entitylivingbase.knockBack(this, 0.4F, MathHelper.sin(this.rotationYaw * 0.017453292F), (-MathHelper.cos(this.rotationYaw * 0.017453292F)));
                                     entitylivingbase.attackEntityFrom(this.getDamageSourceMob(), f3);
                                 }
                             }
@@ -964,8 +977,8 @@ public class EntityLittleMaidAvatarMP extends FakePlayer implements IEntityLittl
 
                             if (this.world instanceof WorldServer && f5 > 2.0F)
                             {
-                                int k = (int)((double)f5 * 0.5D);
-                                ((WorldServer)this.world).spawnParticle(EnumParticleTypes.DAMAGE_INDICATOR, targetEntity.posX, targetEntity.posY + (double)(targetEntity.height * 0.5F), targetEntity.posZ, k, 0.1D, 0.0D, 0.1D, 0.2D);
+                                int k = (int)(f5 * 0.5D);
+                                ((WorldServer)this.world).spawnParticle(EnumParticleTypes.DAMAGE_INDICATOR, targetEntity.posX, targetEntity.posY + targetEntity.height * 0.5F, targetEntity.posZ, k, 0.1D, 0.0D, 0.1D, 0.2D);
                             }
                         }
 

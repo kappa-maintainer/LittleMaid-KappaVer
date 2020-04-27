@@ -66,7 +66,9 @@ public class EntityLittleMaidAvatarSP extends EntityPlayer implements IEntityLit
 	{
 		super.entityInit();
 	}
+	@Override
 	public Entity getCommandSenderEntity(){ return super.getCommandSenderEntity(); }
+	@Override
 	public World getEntityWorld(){ return super.getEntityWorld(); }
 	////////////////////////////////////////////////////////////////////////////////////
 
@@ -219,6 +221,7 @@ public class EntityLittleMaidAvatarSP extends EntityPlayer implements IEntityLit
 	public boolean isUsingItem() {
 		return isUsingItem(avatar.getDominantArm());
 	}
+	@Override
 	public boolean isUsingItemLittleMaid() {
 		return isUsingItem() | isItemTrigger;
 	}
@@ -354,10 +357,12 @@ public class EntityLittleMaidAvatarSP extends EntityPlayer implements IEntityLit
 		return 0;
 	}
 
+	@Override
 	public void setAbsorptionAmount(float par1) {
 		avatar.setAbsorptionAmount(par1);
 	}
 
+	@Override
 	public float getAbsorptionAmount() {
 		return avatar.getAbsorptionAmount();
 	}
@@ -365,6 +370,7 @@ public class EntityLittleMaidAvatarSP extends EntityPlayer implements IEntityLit
 	/**
 	 * 属性値リストを取得
 	 */
+	@Override
 	public AbstractAttributeMap getAttributeMap() {
 //		return super.func_110140_aT();
 		return avatar == null ? super.getAttributeMap() : avatar.getAttributeMap();
@@ -397,6 +403,7 @@ public class EntityLittleMaidAvatarSP extends EntityPlayer implements IEntityLit
 	}
 	*/
 
+	@Override
 	public void getValue() {
 		// EntityLittleMaidから値をコピー
 		setPosition(avatar.posX, avatar.posY, avatar.posZ);
@@ -444,6 +451,7 @@ public class EntityLittleMaidAvatarSP extends EntityPlayer implements IEntityLit
 	/**
 	 * 射撃管制用、rotationを頭に合わせる
 	 */
+	@Override
 	public void getValueVectorFire(double atx, double aty, double atz, double atl) {
 		// EntityLittleMaidから値をコピー
 		double l = MathHelper.sqrt(atl);
@@ -509,6 +517,7 @@ public class EntityLittleMaidAvatarSP extends EntityPlayer implements IEntityLit
 
 	}
 
+	@Override
 	public void setValueVector() {
 		// EntityLittleMiadへ値をコピー
 		avatar.posX = posX - appendX;
@@ -529,20 +538,24 @@ public class EntityLittleMaidAvatarSP extends EntityPlayer implements IEntityLit
 		if (isSwingInProgress) avatar.setSwinging(EnumSound.Null, false);
 	}
 
+	@Override
 	public void W_damageArmor(float par1){
 		super.damageArmor(par1);
 	}
 
+	@Override
 	public float applyArmorCalculations(DamageSource par1DamageSource, float par2)
 	{
 		return super.applyArmorCalculations(par1DamageSource, par2);
 	}
 
+	@Override
 	public float applyPotionDamageCalculations(DamageSource par1DamageSource, float par2)
 	{
 		return super.applyPotionDamageCalculations(par1DamageSource, par2);
 	}
 
+	@Override
 	public void W_damageEntity(DamageSource par1DamageSource, float par2)
 	{
 		super.damageEntity(par1DamageSource, par2);

@@ -239,7 +239,7 @@ public class LMItemMaidSugar extends Item {
 		customTag.setTag(ANIMAL_MAID_KEY, animalTag);
 		
 		//HPの同期
-		double fromHpRatio = ((double)fromEntity.getHealth()) / fromEntity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue();
+		double fromHpRatio = (fromEntity.getHealth()) / fromEntity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue();
 		double toHpMax = toEntity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue();
 		
 		toEntity.setHealth((float) Math.max(1.0D, toHpMax * fromHpRatio));

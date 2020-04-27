@@ -13,6 +13,7 @@ import net.minecraft.entity.EntityLiving;
 @WailaPlugin(value=LittleMaidReengaged.DOMAIN)
 public class WailaPluginLMR implements IWailaPlugin  {
 
+	@Override
 	public void register(IWailaRegistrar registrar) {
 		
 		if (LMRConfig.cfg_plugin_hwyla) {

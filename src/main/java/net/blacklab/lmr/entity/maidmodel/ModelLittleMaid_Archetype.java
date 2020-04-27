@@ -125,11 +125,13 @@ public class ModelLittleMaid_Archetype extends ModelLittleMaidBase {
 		return null;
 	}
 
+	@Override
 	public float getHeight() {
 		// 身長
 		return 1.35F;
 	}
 
+	@Override
 	public float getWidth() {
 		// 横幅
 		return 0.5F;
@@ -163,6 +165,7 @@ public class ModelLittleMaid_Archetype extends ModelLittleMaidBase {
 		GL11.glTranslatef(-0.05F, -0.075F, 0.1F);
 	}
 
+	@Override
 	@Deprecated
 	public boolean isItemHolder() {
 		// アイテムを持っているときに手を前に出すかどうか。

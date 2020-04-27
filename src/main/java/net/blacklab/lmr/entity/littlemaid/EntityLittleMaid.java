@@ -583,6 +583,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		isModeLocked = false;
 	}
 
+	@Override
 	protected void applyEntityAttributes() {
 		// 初期パラメーター
 		super.applyEntityAttributes();
@@ -1423,6 +1424,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 	}
 
 	// ポーション効果のエフェクト
+	@Override
 	public void setAbsorptionAmount(float par1) {
 		// AbsorptionAmount
 		if (par1 < 0.0F) {
@@ -1431,6 +1433,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 
 		dataManager.set(EntityLittleMaid.dataWatch_Absoption, Float.valueOf(par1));
 	}
+	@Override
 	public float getAbsorptionAmount() {
 		return dataManager.get(EntityLittleMaid.dataWatch_Absoption);
 	}
@@ -1756,6 +1759,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 
 	}
 
+	@Override
 	public boolean canBePushed()
 	{
 		// --------------------------------------------
@@ -2118,7 +2122,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 			if (list != null) {
 				PotionEffect potioneffect;
 				for (Iterator<PotionEffect> iterator = list.iterator(); iterator.hasNext(); entityliving.addPotionEffect(new PotionEffect(potioneffect))) {
-					potioneffect = (PotionEffect)iterator.next();
+					potioneffect = iterator.next();
 					addMaidExperience(0.49f*(potioneffect.getDuration()==0?240:potioneffect.getDuration())/20);
 				}
 			}
@@ -2165,6 +2169,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		}
 	}
 
+	@Override
 	public void updateAITasks()
 	{
 		super.updateAITasks();
@@ -2406,24 +2411,25 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 		if(lhealth > 0) {
 			// 近接監視の追加はここ
 			// アイテムの回収
-			if(LMRConfig.cfg_is_arrows_pickable) {
-				if (!getEntityWorld().isRemote) {
-					List<Entity> list = getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(1.0D, 0.0D, 1.0D));
-					if (list != null) {
-						for (int i = 0; i < list.size(); i++) {
-							Entity entity = (Entity)list.get(i);
-							if (!entity.isDead) {
-								if (entity instanceof EntityArrow &&
-										((EntityArrow) entity).shootingEntity == this) {
-									// 特殊回収
-									((EntityArrow)entity).pickupStatus = PickupStatus.ALLOWED;
-								}
-								entity.onCollideWithPlayer(maidAvatar);
+			
+			if (!getEntityWorld().isRemote) {
+				List<Entity> list = getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(1.0D, 0.0D, 1.0D));
+				if (list != null) {
+					for (int i = 0; i < list.size(); i++) {
+						Entity entity = list.get(i);
+						if (!entity.isDead) {
+							if (entity instanceof EntityArrow &&
+									((EntityArrow) entity).shootingEntity == this &&
+									LMRConfig.cfg_is_arrows_pickable) {
+								// 特殊回収
+								((EntityArrow)entity).pickupStatus = PickupStatus.ALLOWED;
 							}
+							entity.onCollideWithPlayer(maidAvatar);
 						}
 					}
 				}
 			}
+			
 			/*
 			// 時計を持っている
 			// TODO:多分この辺りの処理はおかしい
@@ -2787,7 +2793,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 			if(rand.nextInt(16) == 0) {
 				List<Entity> list = getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(8D, 8D, 8D));
 				for (int k = 0; k < list.size(); k++) {
-					Entity entity = (Entity)list.get(k);
+					Entity entity = list.get(k);
 					if (!(entity instanceof EntityMob)) {
 						continue;
 					}
@@ -3566,6 +3572,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 	public boolean isTamed() {
 		return isContract();
 	}
+	@Override
 	public boolean isContract() {
 //		return getEntityWorld().isRemote ? maidContract : super.isTamed();
 		return super.isTamed();
@@ -4256,8 +4263,8 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 			return;
 		}
 		for (int li = 0; li < getEntityWorld().loadedEntityList.size(); li++) {
-			if (((Entity)getEntityWorld().loadedEntityList.get(li)).getEntityId() == lid) {
-				mstatgotcha = (Entity)getEntityWorld().loadedEntityList.get(li);
+			if (getEntityWorld().loadedEntityList.get(li).getEntityId() == lid) {
+				mstatgotcha = getEntityWorld().loadedEntityList.get(li);
 				break;
 			}
 		}
@@ -4649,6 +4656,7 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 //		experienceValue = val;
 	}
 
+	@Override
 	public void setFlag(int par1, boolean par2) {
 		super.setFlag(par1, par2);
 	}
