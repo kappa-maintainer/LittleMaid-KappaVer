@@ -1,7 +1,5 @@
 package net.blacklab.plugin.top;
 
-import static mcjty.theoneprobe.api.TextStyleClass.INFO;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -9,14 +7,11 @@ import java.util.function.Function;
 import javax.annotation.Nullable;
 
 
-import mcjty.theoneprobe.api.ElementAlignment;
 import mcjty.theoneprobe.api.IProbeHitEntityData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoEntityProvider;
 import mcjty.theoneprobe.api.ITheOneProbe;
 import mcjty.theoneprobe.api.ProbeMode;
-import mcjty.theoneprobe.apiimpl.providers.ChestInfoTools;
-import mcjty.theoneprobe.apiimpl.styles.ItemStyle;
 import mcjty.theoneprobe.apiimpl.styles.LayoutStyle;
 import mcjty.theoneprobe.config.Config;
 import net.blacklab.lmr.LittleMaidReengaged;
@@ -41,7 +36,7 @@ public class TheOneProbePlugin implements IProbeInfoEntityProvider  {
 		if(!(entity instanceof EntityLittleMaid)) return;
 		EntityLittleMaid maid = (EntityLittleMaid) entity;
 		if(!maid.getMaidMasterEntity().isEntityEqual(player) && !LMRConfig.cfg_cstm_everyones_maid)return;
-		List<ItemStack> stacks = (List<ItemStack>) new ArrayList();
+		List<ItemStack> stacks = new ArrayList();
 		for(int i = 0; i < maid.maidInventory.getSizeInventory(); i++) {
 			if(!maid.maidInventory.getStackInSlot(i).isEmpty())
 				stacks.add(maid.maidInventory.getStackInSlot(i).copy());
