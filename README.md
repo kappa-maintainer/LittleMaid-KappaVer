@@ -1,25 +1,39 @@
-LittleMaidReengaged Firis's Patch
+LittleMaidReengaged yet another fork(YAF LittleMaid)
 ===
 
-いろいろ手伝ってくれたりくれなかったりする、ちいさなメイドさんを追加するModです。  
-[Verclene](https://github.com/Verclene)さんが作成したLittleMaidReengagedを非公式に1.12.2対応したものです。  
+A mod add many little maids, now you can become a maid too!
+Based on [Firis](https://github.com/firis-games)'s [fork](https://github.com/firis-games/LittleMaidReengagedFirisPatch) of [Verclene](https://github.com/Verclene).
+This mod is not an offical successor of any above mentioned mods, all modifies made are based on original mod's licences.
 
 ---
 
-## 注意事項
-対応バージョン
-* Minecraft 1.12.2  
-* Minecraft Forge 1.12.2-14.23.5.2768
+## Note
 
-開発中のModのため動作しない可能性があります。  
-バックアップの上自己責任にてご使用ください。  
+Minecraft version and Forge version:
+* Minecraft 1.12.2  
+* Minecraft Forge 1.12.2-14.23.5.2847
+
+A 1.15+ port is planning, but have no ETA.
+
+This mod is under heavy development, use at your own risk, and remember to backup your world!
   
-オリジナルとは以下の点が異なります。
-* 前提ModのEBLibが統合されています
-* 1.12.2対応のため処理の改変  
+## Features
+
+* An option to disable friendly fire between maids and come from maids.
+* A button to lock maid's mode and disable auto switch. This allow maids to use any non-vanilla and not on list items.
+* Add ItemHandler capability to maids, so TiC's range weapon can work correctly with them.
+* Improved most of Firis's avatar system, now it is multiplayer ready.
+* An option enable changing player's eye height and bounding box when becoming a maid.
+* Fixed voms model's blocking and sitting animation.
+* Fixed a long-exist log spamming problem.
+* The One Probe integration.
+
+## Future Plan
+
+* Support Flan's mod
+* Some sort of instruction mode
 
 ## LICENCE
-このMODは以下のプログラムを改変して作成しています。  
   
 [EBLib](https://github.com/Verclene/EBLib)  
 [LittleMaidReengaged](https://github.com/Verclene/LittleMaidReengaged)　　
