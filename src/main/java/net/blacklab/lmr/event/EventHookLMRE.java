@@ -116,7 +116,6 @@ public class EventHookLMRE
 						event.setCanceled(true);
 					}
 				}
-					
 			}
 		}
 	}

@@ -211,6 +211,7 @@ public class EntityMode_Basic extends EntityModeBlockBase {
 		return myInventory instanceof TileEntity;
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public boolean checkBlock(String pMode, int px, int py, int pz) {
 		TileEntity ltile = owner.getEntityWorld().getTileEntity(new BlockPos(px, py, pz));
@@ -238,6 +239,7 @@ public class EntityMode_Basic extends EntityModeBlockBase {
 		return false;
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public boolean overlooksBlock(String pMode) {
 		// チェストカートの検索

@@ -10,6 +10,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 public class LittleMaidHelper {
 
@@ -119,8 +121,8 @@ public class LittleMaidHelper {
 	 */
 	public static String getEntityId(EntityLiving entityliving) {
 		String mobid = "";
-		net.minecraftforge.fml.common.registry.EntityEntry entry = 
-				net.minecraftforge.fml.common.registry.EntityRegistry.getEntry(entityliving.getClass());
+		EntityEntry entry = 
+				EntityRegistry.getEntry(entityliving.getClass());
 		if (entry != null) {
 			mobid = entry.getRegistryName().toString();
 		}

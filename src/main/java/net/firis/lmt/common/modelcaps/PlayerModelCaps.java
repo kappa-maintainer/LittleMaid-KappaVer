@@ -19,6 +19,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.common.Loader;
 
 /**
  * IModelCapsのEntityPlayer用
@@ -213,6 +214,9 @@ public class PlayerModelCaps implements IModelCaps {
 		//弓構え
 		case caps_aimedBow:
 			//プレイヤーが弓構え
+			if(Loader.isModLoaded("flansmod") || Loader.isModLoaded("Flan's Mod")) {
+				
+			}
 			return getPlayerAction(owner, EnumHandSide.RIGHT) == EnumAction.BOW 
 			|| getPlayerAction(owner, EnumHandSide.LEFT) == EnumAction.BOW;
 			

@@ -17,6 +17,7 @@ import net.blacklab.lmr.client.resource.OldZipTexturesWrapper;
 import net.blacklab.lmr.client.resource.SoundResourcePack;
 import net.blacklab.lmr.config.LMRConfig;
 import net.blacklab.lmr.entity.littlemaid.EntityLittleMaid;
+import net.blacklab.lmr.entity.littlemaid.EntityMarkerDummy;
 import net.blacklab.lmr.event.EventHookLMRE;
 import net.blacklab.lmr.item.ItemMaidPorter;
 import net.blacklab.lmr.item.ItemMaidSpawnEgg;
@@ -513,6 +514,7 @@ public class LittleMaidReengaged {
     			entityId, 
     			instance, 32, 5, true);
     	entityId++;
+    
     	
     	//リトルメイドテスト用モジュール
     	LMTCore.registerEntities(entityId);

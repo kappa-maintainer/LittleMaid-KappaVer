@@ -1570,7 +1570,6 @@ public class EntityLittleMaid extends EntityTameable implements IModelEntity {
 	public void writeEntityToNBT(NBTTagCompound par1nbtTagCompound) {
 		// データセーブ
 		super.writeEntityToNBT(par1nbtTagCompound);
-
 		par1nbtTagCompound.setTag("Inventory", maidInventory.writeToNBT(new NBTTagList()));
 		par1nbtTagCompound.setString("Mode", getMaidModeString());
 		par1nbtTagCompound.setBoolean("Wait", isMaidWait());
