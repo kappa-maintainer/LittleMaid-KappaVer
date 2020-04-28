@@ -45,6 +45,7 @@ import net.minecraftforge.common.BiomeDictionary;
 //github.com/Verclene/LittleMaidReengaged.git
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -52,6 +53,7 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
@@ -337,7 +339,9 @@ public class LittleMaidReengaged {
 
 		MinecraftForge.EVENT_BUS.register(new EventHookLMRE());
 		VEventBus.instance.registerListener(new EventHookLMRE());
-		
+		if(Loader.isModLoaded("theoneprobe")) {
+			FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "net.blacklab.plugin.top.TheOneProbePlugin$GetTheOneProbe");
+		}
 		//描画イベント登録
 		proxy.initClientRendererEventRegister();
 

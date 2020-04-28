@@ -170,7 +170,7 @@ public class ExperienceHandler {
 		String causeType = tagCompound.getString(LittleMaidReengaged.DOMAIN + ":EXP_HANDLER_DEATH_CAUSE_T");
 		if (causeType != null && !causeType.isEmpty()) {
 			NBTTagCompound causeEntityTag = tagCompound.getCompoundTag(LittleMaidReengaged.DOMAIN + ":HADNLER_DEATH_CAUSE_E");
-			if (causeEntityTag != null) {
+			if (causeEntityTag.getSize() != 0) {
 				Entity entity = EntityList.createEntityFromNBT(causeEntityTag, theMaid.getEntityWorld());
 				if (entity != null) {
 					deadCause = new EntityDamageSource(causeType, entity);
