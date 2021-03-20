@@ -1,9 +1,10 @@
-LittleMaidReengaged yet another fork(YAF LittleMaid)
+LittleMaidReengaged yet another fork(Archived)
 ===
 
 A mod add many little maids, now you can become a maid too!
 Based on [Firis](https://github.com/firis-games)'s [fork](https://github.com/firis-games/LittleMaidReengagedFirisPatch) of [Verclene](https://github.com/Verclene).
 This mod is not an offical successor of any above mentioned mods, all modifies made are based on original mod's licences.
+
 
 ---
 
